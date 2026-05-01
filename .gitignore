@@ -1,8 +1,12 @@
 # Raw corpus papers — copyright, never commit
 01_corpus/*/raw/
+01_corpus/*/converted/
+raw/
 
 # Author's unpublished manuscripts
 04_manuscripts/*/input/
+04_manuscripts/*/converted/
+manuscript.pdf
 
 # OS artifacts
 .DS_Store

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/wantong.cai/.codex/skills/mineru-pdf-md/**)",
+      "Read(//Users/wantong.cai/.codex/skills/mineru-pdf-md/scripts/**)"
+    ]
+  }
+}

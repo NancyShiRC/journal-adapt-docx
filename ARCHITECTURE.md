@@ -1,7 +1,7 @@
 # System Architecture
 
 **Project:** Journal-Adaptive Academic Writing Workflow  
-**Version:** MVP 1.0  
+**Version:** 1.1 (post-MVP performance update)  
 **Date:** 2026-05-01
 
 ---
@@ -34,41 +34,66 @@ These three layers are independent. Each can be replaced or upgraded without bre
 
 ## 2. Full Data Flow
 
+Two distinct phases. Phase 1 runs once per journal. Phase 2 runs per manuscript section.
+
 ```
+══════════════════════════════════════════════
+PHASE 1 — CORPUS ANALYSIS  (runs once per journal, results cached)
+══════════════════════════════════════════════
+
 [Human] selects papers → corpus_meta.yaml
-                              │
-                    [AI] Paper Style Card extraction
-                    (one card per paper, no text copying)
-                              │
-                    [Human] reviews cards for plagiarism
-                              │
-                    [AI] Journal Style Card aggregation
-                    (strong signal ≥3 papers, weak signal 1-2)
-                              │
-                    [Human] reviews, marks signal strength
-                              │
-                    [AI] generates Temporary SKILL.md
-                    (explicit priority rules embedded)
-                              │
-                    [Human] confirms SKILL.md
-                              │
-                    ┌─────────┴──────────┐
-              [AI] Round 1          [Original manuscript]
-              Diagnosis report
-                    │
-              [Human] approves diagnosis
-                    │
-              [AI] Round 2
-              Revised section text
-                    │
-              [Human] accepts/rejects paragraph-by-paragraph
-                    │
-              [AI] Round 3
-              Revision Log with reusability assessment
-                    │
-              [Human] marks rules worth generalizing
-                    │
-              → 05_workflow_skills/ (distilled reusable skill)
+              │
+[Module 0] Per-PDF conversion via MinerU (one file at a time)
+              │
+[Module A] corpus_meta.yaml finalized
+              │
+[Module B] Paper Style Card extraction — one card per paper
+              │  (no copied text; structural/rhetorical descriptions only)
+[Human] reviews cards
+              │
+[Module C] Journal Style Card aggregation
+              │  (STRONG ≥3 papers, WEAK 1-2)
+[Human] deep-reviews, fills Section 10
+              │
+[Module D] Temporary SKILL.md generated
+              │  (covers ALL sections: 2A–2G)
+[Human] confirms SKILL.md, sets status: active
+              │
+              ▼
+        SKILL.md is now the only artifact
+        needed for Phase 2. Corpus files
+        are not read again during revision.
+
+══════════════════════════════════════════════
+PHASE 2 — MANUSCRIPT REVISION  (per session, loads SKILL.md only)
+══════════════════════════════════════════════
+
+[Module E0] Section Triage — read full paper ONCE
+              │  Output: triage_report.md with priority and mode per section
+[Human] approves triage, overrides priorities if needed
+              │
+              ├── HIGH sections (Abstract, Introduction)
+              │     → Mode A: Full 3-round
+              │        Round 1: Diagnosis
+              │        [Human] approves
+              │        Round 2: Revision
+              │        [Human] accepts/rejects paragraph-by-paragraph
+              │        Round 3: Revision Log + reusability assessment
+              │        [Human] marks rule candidates
+              │
+              ├── MED sections (Lit Review, Methods, Discussion)
+              │     → Mode B: Merged Round
+              │        Diagnosis + revision in one output
+              │        Simplified log (rule candidates only)
+              │        [Human] accepts/rejects
+              │
+              └── LOW sections (Results, Conclusion)
+                    → Mode C: Fast Scan
+                       Flags HIGH severity issues only
+                       No revision unless author requests
+
+              ▼
+[Module F] Rule candidates → 05_workflow_skills/
 ```
 
 ---
@@ -163,7 +188,58 @@ The Paper Style Card extraction is the key risk point. The system enforces:
 
 ---
 
-## 7. Extensibility (MVP → Future)
+## 7. Performance Design
+
+### The Two-Phase Rule (critical for cost control)
+
+Phase 1 (corpus analysis) runs **once per journal**. Phase 2 (revision) runs **per section, per session**. Never mix them.
+
+The most common performance mistake: Codex re-reads corpus papers or the Journal Style Card during a revision session. Once SKILL.md is active, it is the only context source for revision. Corpus files are never loaded in Phase 2.
+
+### Context size targets during Phase 2
+
+| What gets loaded | Approx tokens | Notes |
+|-----------------|--------------|-------|
+| SKILL.md Part 1 (Priority Rules) | ~300 | Always |
+| SKILL.md Part 2 (one section) | ~400–600 | Load only the block for the section being revised |
+| SKILL.md Part 3–5 (conflicts, flags, register) | ~400 | Always |
+| Section text (one section of manuscript) | ~800–2000 | The section being revised |
+| **Total per revision call** | **~2000–3300** | Well within single-call context |
+
+Do not load: Journal Style Card (~3000 tokens), corpus papers (~8000–20000 tokens each).
+
+### Revision mode time targets
+
+| Mode | LLM calls | Target wall time |
+|------|-----------|-----------------|
+| Mode A (3-round, HIGH sections) | 3 sequential + 2 human gates | 8–12 min |
+| Mode B (merged, MED sections) | 1–2 calls + 1 human gate | 3–5 min |
+| Mode C (fast scan, LOW sections) | 1 call | 1–2 min |
+
+### Full-paper revision estimate (7 sections)
+
+```
+Section Triage (E0):        1 call    ≈ 3 min
+Abstract (Mode A):          3 calls   ≈ 10 min
+Introduction (Mode A):      3 calls   ≈ 10 min
+Lit Review (Mode B):        2 calls   ≈ 4 min
+Methods (Mode B):           2 calls   ≈ 4 min
+Results (Mode C):           1 call    ≈ 2 min
+Discussion (Mode B):        2 calls   ≈ 4 min
+Conclusion (Mode C):        1 call    ≈ 2 min
+─────────────────────────────────────────────
+Total                       15 calls  ≈ 39 min
+```
+
+Compare to naive sequential 3-round on all sections: 7 × 3 calls × ~5 min = ~105 min.
+
+### SKILL.md coverage requirement
+
+SKILL.md must cover all sections (Parts 2A–2G) before full-paper revision begins. A SKILL.md with only `target_sections: ["introduction"]` cannot run full-paper revision — Codex will fall back to general rules for uncovered sections, losing all journal-specific signal.
+
+---
+
+## 9. Extensibility (MVP → Future)
 
 | Dimension | MVP | Extension Path |
 |-----------|-----|---------------|
@@ -184,7 +260,7 @@ The `corpus_meta.yaml` files (metadata only) are safe to open-source.
 
 ---
 
-## 8. Reference Projects
+## 10. Reference Projects
 
 These were evaluated during design. None implement the full corpus→style→skill pipeline.
 
@@ -198,7 +274,7 @@ These were evaluated during design. None implement the full corpus→style→ski
 
 ---
 
-## 9. MVP Timeline
+## 11. MVP Timeline
 
 ```
 Week 1:

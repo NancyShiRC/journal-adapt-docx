@@ -8,6 +8,72 @@ Each module is defined by: inputs, outputs, constraints, human gate, and impleme
 
 ---
 
+## Module 0 — Document Conversion Preprocessing
+
+**Owner:** AI runs local tool; human supplies source files  
+**Location:** `01_corpus/[JOURNAL_NAME]/converted/` and `04_manuscripts/[PAPER_SLUG]/converted/`
+
+### Inputs
+- Target journal PDFs in `01_corpus/[JOURNAL_NAME]/raw/`
+- Manuscript PDF in `04_manuscripts/[PAPER_SLUG]/input/`
+- Local PDF-to-Markdown converter, currently `mineru-pdf-md`
+
+### Outputs
+```text
+converted/
+  AGENT_README.md
+  agent_readable.md
+  [per-document Markdown/JSON/assets]
+```
+
+### Constraints
+- Raw PDFs and converted full-text outputs must not be committed if they contain copyrighted papers or unpublished manuscript content.
+- Conversion quality must be checked before style extraction or revision.
+- If batch conversion fails or is slow, run per-PDF conversion and record the issue in the MVP test log.
+
+### Human Gate
+Human confirms that the correct source PDFs and manuscript were supplied. AI reports conversion failures and quality concerns before using the converted content.
+
+### Implementation Notes
+- Use converted Markdown as the default reading source for Modules B and E.
+- For MVP testing, a partial converted corpus may be used only with explicit `WEAK` signal labels.
+
+### MinerU Conversion Protocol (from MVP test 2026-05-01)
+
+**Skill location:** `/Users/wantong.cai/.codex/skills/mineru-pdf-md/`  
+**Wrapper script:** `~/.codex/skills/mineru-pdf-md/scripts/pdf_to_agent_md.py`  
+**MinerU binary:** `/Users/wantong.cai/.local/share/codex-mineru/venv/bin/mineru`
+
+**CRITICAL: Do NOT pass a directory to the wrapper for corpus batch conversion.**
+
+Folder-mode triggers MinerU's internal HTTP server to process all PDFs in parallel batches. The server crashes mid-batch on macOS with `503 Service Unavailable` after completing the first batch only. This was observed in MVP: 8 PDFs submitted, 2 succeeded, 6 failed.
+
+**Required approach — convert each PDF individually:**
+```bash
+# For each corpus PDF:
+python3 ~/.codex/skills/mineru-pdf-md/scripts/pdf_to_agent_md.py \
+  "01_corpus/[JOURNAL]/raw/paper.pdf" \
+  --output-dir "01_corpus/[JOURNAL]/converted/paper_name"
+
+# For the manuscript:
+python3 ~/.codex/skills/mineru-pdf-md/scripts/pdf_to_agent_md.py \
+  "04_manuscripts/[SLUG]/input/manuscript.pdf" \
+  --output-dir "04_manuscripts/[SLUG]/converted/manuscript"
+```
+
+After all individual conversions complete, consolidate into a single `agent_readable.md`:
+```bash
+# Manually or via script: cat all per-PDF agent_readable.md files into one index
+# Update AGENT_README.md to list all successfully converted files
+```
+
+**Conversion quality check before proceeding to Module B:**
+- Verify `AGENT_README.md` shows exit code `0` for each PDF
+- Spot-check one converted `.md` file — confirm math formulas render as LaTeX, tables are present, reading order is correct
+- If a PDF fails after 2 retries, mark `converted: false` in `corpus_meta.yaml` and exclude from style extraction
+
+---
+
 ## Module A — Corpus Setup
 
 **Owner:** Human  
@@ -157,12 +223,126 @@ Human reviews SKILL.md and confirms:
 
 ---
 
-## Module E — Three-Round Manuscript Revision
+## Module E0 — Section Triage (Full-Paper Fast Scan)
+
+**Owner:** AI (Claude)  
+**Location:** `04_manuscripts/[PAPER_SLUG]/diagnosis/`  
+**When to run:** Before any per-section revision on a new manuscript, or when revising more than 2 sections in a single session.
+
+### Purpose
+
+Read the full manuscript once and produce a priority map. This avoids re-reading the full text for each section during Module E revision. It also lets the author decide which sections get full 3-round treatment vs. merged or fast-scan treatment before any token-intensive revision starts.
+
+### Inputs
+- Full manuscript text (converted Markdown from `converted/`)
+- Active SKILL.md (Part 1 Priority Rules only — do NOT load section-specific guidance yet)
+
+### Output: `diagnosis/triage_report.md`
+
+```markdown
+# Section Triage Report
+
+date: [DATE]
+manuscript: [PAPER_SLUG]
+skill_used: [SKILL filename]
+
+| Section | Paragraphs | Est. Match Score | Highest Severity | Priority | Recommended Mode |
+|---------|-----------|-----------------|-----------------|----------|-----------------|
+| Abstract | N | [1-5] | HIGH/MED/LOW | HIGH/MED/LOW | 3-round / merged / fast-scan |
+| Introduction | N | [1-5] | ... | ... | ... |
+| Literature Review | N | [1-5] | ... | ... | ... |
+| Methods/Model | N | [1-5] | ... | ... | ... |
+| Results | N | [1-5] | ... | ... | ... |
+| Discussion | N | [1-5] | ... | ... | ... |
+| Policy Implications | N | [1-5] | ... | ... | ... |
+| Conclusion | N | [1-5] | ... | ... | ... |
+
+## Top Problems by Section
+[One paragraph per section: what are the 1-3 most important issues?
+No paragraph-level detail. Enough for the author to approve or override priority.]
+```
+
+### Human Gate
+Author reviews the triage report and may:
+- Override priority (e.g., downgrade Results from MED to fast-scan)
+- Reorder sections
+- Exclude sections from this revision session
+
+**No revision begins until triage is approved.**
+
+### Why This Matters for Performance
+Reading the full paper once in triage costs ~1 LLM call. Without triage, Module E reads each section separately, costing N calls just for loading. For a 7-section paper: triage saves ~6 redundant full-context reads.
+
+---
+
+## Module E — Manuscript Revision
 
 **Owner:** AI (Claude), paragraph-level human approval  
 **Location:** `04_manuscripts/[PAPER_SLUG]/`
 
-### Round 1: Diagnosis
+### Session Entry Check (run before any revision)
+
+```
+IF SKILL_[JOURNAL]_[DATE].md exists AND status = active:
+  → Load SKILL.md only. Do NOT re-read corpus papers, journal style card, or paper style cards.
+  → Go directly to Module E0 (triage) or Module E (revision) as appropriate.
+
+IF SKILL_[JOURNAL]_[DATE].md does not exist or is outdated:
+  → Run Modules B → C → D first, then return here.
+```
+
+**This check is mandatory.** Corpus analysis (Modules B/C/D) runs once per journal, not once per revision session.
+
+---
+
+### Revision Modes
+
+Each section is assigned one of three modes based on the triage report.
+
+#### Mode A — Full 3-Round (for HIGH priority sections: Abstract, Introduction)
+
+Full diagnostic round → human approval → revision round → human approval → revision log.  
+Use when: journal match score ≤ 3, or highest severity = HIGH, or section is Abstract/Introduction.
+
+#### Mode B — Merged Round (for MED priority sections: Literature Review, Methods, Discussion)
+
+Diagnosis and revision combined in one output. Simplified log (rule candidates only, no full original/revised text).  
+Use when: journal match score 3-4, highest severity = MED.
+
+**Merged round output format:**
+```markdown
+## [Section Name] — Merged Revision
+
+### Changes Made
+| Paragraph | Problem | Change | Rule | Source |
+|-----------|---------|--------|------|--------|
+| Para N | [problem type + description] | [what changed] | [rule] | journal-card/econ-base |
+
+### Unchanged Paragraphs
+Paragraphs [list]: no issues above LOW severity.
+
+### Rule Candidates
+- [rule candidate 1]
+- [rule candidate 2]
+```
+
+#### Mode C — Fast Scan (for LOW priority sections: Results, Conclusion)
+
+Read section, output a short list of any HIGH severity issues only. No revision output unless author requests it.  
+Use when: journal match score ≥ 4, no HIGH severity issues expected.
+
+**Fast scan output format:**
+```markdown
+## [Section Name] — Fast Scan
+
+Overall match: [score]/5
+Issues above LOW severity: [none / list]
+Recommendation: [no revision needed / one specific fix]
+```
+
+---
+
+### Round 1: Diagnosis (Mode A only)
 
 **Inputs:**
 - Original manuscript section text (`input/[section].tex` or `.txt`)

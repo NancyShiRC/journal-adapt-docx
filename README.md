@@ -15,7 +15,9 @@ This is **not** an auto-writer. It is a style-transfer and revision workflow gro
 **Core pipeline:**
 
 ```
-target journal corpus
+target journal PDFs / manuscript PDF
+  → Markdown conversion for AI reading
+  → target journal corpus
   → Paper Style Cards (per-paper style extraction)
   → Journal Style Card (aggregated journal norms)
   → Temporary SKILL.md (adaptive writing rule set)
@@ -98,9 +100,10 @@ This system solves that by extracting journal-specific writing norms from actual
 
 ## MVP Scope
 
-One journal. One manuscript. Manual corpus preparation. Claude Code execution.
+One journal. One manuscript. Manual corpus preparation. Local PDF-to-Markdown conversion. Claude Code execution.
 
 **MVP success criteria:**
+- Can convert target journal PDFs and the manuscript PDF into AI-readable Markdown
 - Can extract Paper Style Cards from 5–8 journal papers without copying original text
 - Can aggregate a Journal Style Card with strong/weak signal labeling
 - Can generate a Temporary SKILL.md with explicit priority rules

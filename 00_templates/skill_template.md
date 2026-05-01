@@ -59,37 +59,83 @@ Remove these regardless of other rules:
 
 ---
 
+## LOADING INSTRUCTION FOR REVISION SESSIONS
+
+When running Module E revision, load SKILL.md sections as follows:
+
+```
+ALWAYS LOAD:
+  Part 1 — Priority Rules
+  Part 3 — Conflict Resolutions
+  Part 4 — Signal-Weak Flags
+  Part 5 — Language Register Calibration
+
+LOAD ON DEMAND (only for the section being revised):
+  Part 2A — if revising Abstract
+  Part 2B — if revising Introduction
+  Part 2C — if revising Literature Review
+  Part 2D — if revising Methods/Model
+  Part 2E — if revising Results
+  Part 2F — if revising Discussion / Policy Implications
+  Part 2G — if revising Conclusion
+
+DO NOT LOAD:
+  Journal Style Card (superseded by this SKILL.md)
+  Corpus papers or Paper Style Cards
+  Any file from 01_corpus/ or 02_journal_style/
+```
+
+This keeps each revision session context small: Part 1 + one Part 2 block + the section text.
+
+---
+
 ## PART 2 — SECTION-SPECIFIC GUIDANCE
 
-### Abstract
+### Part 2A — Abstract
 
+**Revision mode:** [HIGH = 3-round / MED = merged / LOW = fast-scan]  
 **Journal norm:** [fill from Journal Style Card — structure, length, tense, register]
+
+**Structure:**
+[e.g., "context → gap → method → main finding → implication, 4-5 sentences"]
+
+**Tense:**
+[e.g., "present for context and gap; past for method and findings"]
+
+**Contribution placement:**
+[e.g., "finding stated directly, no 'this paper contributes' framing"]
 
 **Guidance:**
 - [specific instruction derived from journal style card]
-- [specific instruction derived from journal style card]
-- [flag weak signals: "SIGNAL-WEAK: only 2 papers use X pattern"]
+- [flag weak signals: "SIGNAL-WEAK: only N papers use X pattern"]
 
 **Do not:**
 - [anti-patterns specific to this journal's abstract style]
 
 ---
 
-### Introduction
+### Part 2B — Introduction
 
+**Revision mode:** [HIGH = 3-round / MED = merged / LOW = fast-scan]  
 **Journal norm:** [fill from Journal Style Card]
+
+**Required sequence:**
+[e.g., "operational context → supply-chain consequence → gap → RQs → model preview → contributions → roadmap"]
 
 **Opening move:**
 [describe the required/preferred hook type for this journal]
 
 **Problem framing:**
-[describe how to build urgency — phenomenon → consequence → gap, or other pattern]
+[describe how to build urgency]
 
 **Gap statement:**
-[where and how to state the gap]
+[where and how to state the gap; what vocabulary signals it]
 
-**Contribution placement and format:**
-[early/late, numbered/embedded, voice preference]
+**Research questions:**
+[explicit / implicit / absent — and format]
+
+**Contribution format:**
+[numbered/embedded, voice, claim scope]
 
 **Literature:**
 [integrated vs standalone, how to position vs prior work]
@@ -102,62 +148,119 @@ Remove these regardless of other rules:
 
 ---
 
-### Method / Model
+### Part 2C — Literature Review
 
+**Revision mode:** [HIGH / MED / LOW]  
 **Journal norm:** [fill from Journal Style Card]
 
-**Entry point:** [intuition first / formal first — and how]
+**Structure:**
+[thematic / chronological / by method — and how themes are sequenced]
 
-**Exposition style:** [theorem-proof / walkthrough / etc.]
+**Positioning move:**
+[how papers in this journal distinguish their contribution from prior work in the lit review]
 
-**Notation:** [density level and conventions]
+**Citation density:**
+[high / moderate — and what counts as sufficient coverage]
 
-**Verification:** [what type of formal or empirical check is expected]
+**Common failure:**
+[e.g., "lit review that summarizes without positioning" / "lists papers without synthesizing the gap"]
 
 **Do not:**
-- [method anti-patterns]
+- [lit review anti-patterns]
 
 ---
 
-### Results
+### Part 2D — Methods / Model
 
+**Revision mode:** [HIGH / MED / LOW]  
 **Journal norm:** [fill from Journal Style Card]
 
-**Narration style:** [result → mechanism → implication, or other]
+**Entry point:**
+[intuition first / formal first — and how to make the transition]
 
-**Mechanism emphasis:** [required / optional / absent in this journal]
+**System description:**
+[how to describe actors, decisions, and assumptions before notation]
 
-**Robustness:** [where to put it and how to frame it]
+**Exposition style:**
+[theorem-proof / proposition-then-proof / definition-buildup / walkthrough]
+
+**Notation density:**
+[high / moderate — and where to introduce notation]
+
+**Assumption justification:**
+[how explicit and how lengthy explanations of assumptions should be]
+
+**Verification:**
+[what type of formal check or numerical validation is expected in this journal]
 
 **Do not:**
-- [results anti-patterns]
+- [method anti-patterns — e.g., "notation before system motivation"]
 
 ---
 
-### Discussion
+### Part 2E — Results
 
+**Revision mode:** [HIGH / MED / LOW]  
 **Journal norm:** [fill from Journal Style Card]
 
-**Function:** [what discussion must add beyond results in this journal]
+**Narration style:**
+[e.g., "result → mechanism → parameter comparison → managerial implication"]
 
-**Scope:** [how far to extend claims]
+**Comparison structure:**
+[how to present comparisons across model cases, structures, or policies]
 
-**Policy language:** [register and specificity level]
+**Mechanism emphasis:**
+[required / optional — and how explicit to be]
+
+**Robustness:**
+[where in the section, how to frame, how much space]
+
+**Quantitative claims:**
+[precise / order-of-magnitude / qualitative-only — what this journal expects]
 
 **Do not:**
-- [discussion anti-patterns]
+- [results anti-patterns — e.g., "repeating the model setup", "significance without effect size"]
 
 ---
 
-### Policy Implications (if applicable)
+### Part 2F — Discussion and Policy Implications
 
+**Revision mode:** [HIGH / MED / LOW]  
 **Journal norm:** [fill from Journal Style Card]
 
-**Placement:** [where in the paper]
+**Function:**
+[what discussion must add beyond results in this journal — mechanism deepening / policy application / limitation / future scope]
 
-**Claim specificity:** [how specific vs general]
+**Scope of claims:**
+[how far the paper is expected to generalize beyond the model]
 
-**Audience register:** [academic / policy-accessible]
+**Policy language register:**
+[academic / policy-accessible — and how specific recommendations should be]
+
+**Limitation acknowledgment:**
+[proactive / brief / absent — what this journal expects]
+
+**Do not:**
+- [discussion anti-patterns — e.g., "rehashing results", "overclaiming beyond model scope"]
+
+---
+
+### Part 2G — Conclusion
+
+**Revision mode:** [HIGH / MED / LOW — usually LOW]  
+**Journal norm:** [fill from Journal Style Card]
+
+**Function:**
+[what conclusion adds beyond discussion — what this journal expects here]
+
+**Length:**
+[short / medium — and what signals too long]
+
+**Future research:**
+[required / optional / absent — and how specific to be]
+
+**Do not:**
+- [conclusion anti-patterns — e.g., "repeating the paper", "opening new claims not established in results"]
 
 ---
 
