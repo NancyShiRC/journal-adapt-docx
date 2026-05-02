@@ -10,3 +10,6 @@ manuscript.pdf
 
 # OS artifacts
 .DS_Store
+
+# Local private scripts
+00_local_only/
