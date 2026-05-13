@@ -1,8 +1,11 @@
 # journal-adapt
 
+> **Learn any journal's writing conventions from its published papers. Revise your manuscript to match — section by section.**
+
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 ![Codex](https://img.shields.io/badge/Codex-compatible-green)
+![Version](https://img.shields.io/badge/version-1.0-brightgreen)
 
 You know what your paper says. Getting it past reviewers at a specific journal is where it stalls.
 
