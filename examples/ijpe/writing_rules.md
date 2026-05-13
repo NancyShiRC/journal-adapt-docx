@@ -47,7 +47,7 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 ### Part 2A — Abstract
 
-**Revision mode:** HIGH by default for full-paper MVP revision.
+**Revision mode:** HIGH — apply all rules fully.
 
 **Journal norm:** Move from operational context to specific supply-chain decision, then to model approach and tightly scoped contribution. Keep the abstract technical and concrete; do not use broad sustainability or platform-economy language unless it is already supported by the manuscript.
 

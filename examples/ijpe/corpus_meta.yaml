@@ -7,9 +7,9 @@ topic_keywords:
   - "closed-loop supply chain"
   - "battery lifecycle"
 method_type: "model+simulation+calibration"
-mvp_notes:
+notes:
   conversion_tool: "mineru-pdf-md"
-  conversion_status: "all 8 corpus PDFs converted; 6 converted via per-PDF commands after folder-mode failure"
+  conversion_status: "all 8 corpus PDFs converted; 6 converted via per-PDF commands after folder-mode failed on macOS"
   signal_policy: "STRONG signals require at least 3 supporting papers or at least 60% of the corpus"
 papers:
   - id: ijpe_001
