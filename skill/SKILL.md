@@ -447,3 +447,4 @@ Priority 3 rules are loaded from `base_rules/` based on the discipline the user 
 | Other + user skips | No P3. Only P2 + P4 apply. |
 
 Read the selected file fully at the start of Phase 1. Apply its rules as P3 throughout both phases.
+
