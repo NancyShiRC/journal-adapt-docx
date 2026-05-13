@@ -1,127 +1,182 @@
-# Journal-Adaptive Academic Writing Workflow
+# journal-adapt
 
-**Status:** MVP Design Phase  
-**Owner:** Product/Arch design by Claude (PM role); Implementation by Codex  
-**Last Updated:** 2026-05-01
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
+![Codex](https://img.shields.io/badge/Codex-compatible-green)
 
----
+You know what your paper says. Getting it past reviewers at a specific journal is where it stalls.
 
-## What This Is
+Every journal has unwritten rules — how introductions are framed, how contributions are stated, how deep the policy discussion should go. Most writing skills give you general rules. But general rules don't know that *IJPE* prefers embedded prose over numbered lists, or that *Management Science* opens with a puzzle not a literature gap.
 
-A workflow system that adapts your academic manuscript's language and argumentation style to match a specific target journal — by learning from that journal's published papers.
+**journal-adapt learns those rules from the journal itself.** It reads published papers from your target journal, extracts their writing conventions, and generates a custom revision ruleset. Then it uses that ruleset to revise your manuscript — section by section, paragraph by paragraph.
 
-This is **not** an auto-writer. It is a style-transfer and revision workflow grounded in corpus evidence.
-
-**Core pipeline:**
-
-```
-target journal PDFs / manuscript PDF
-  → Markdown conversion for AI reading
-  → target journal corpus
-  → Paper Style Cards (per-paper style extraction)
-  → Journal Style Card (aggregated journal norms)
-  → Temporary SKILL.md (adaptive writing rule set)
-  → 3-round manuscript revision
-  → Revision Log + Reusable Rules
-```
+Same pipeline. Any journal.
 
 ---
 
-## Why This Exists
+## How it works
 
-Existing academic writing skills (e.g., `econ-writing-skill`) are:
-- Static and domain-general
-- Not adapted to specific journals
-- Not aware of interdisciplinary paper types
+```mermaid
+flowchart TD
+    A[Journal PDFs\n5–8 papers] --> B[PDF → Markdown\nMinerU]
+    B --> C[Per-paper Style Cards\nstructure + rhetoric only]
+    C --> D[Journal Style Card\nSTRONG / WEAK signal]
+    D --> E[Journal Writing Rules\nyour custom ruleset]
+    E --> F{You review\nand confirm}
+    F --> G[Your Manuscript\nPDF or Markdown]
+    G --> H[Diagnosis\nper paragraph]
+    H --> I[Revision\npriority rules applied]
+    I --> J[Revision Log\nwhat changed and why]
+    J --> K[Revised Markdown\nready for LaTeX or Word]
 
-This system solves that by extracting journal-specific writing norms from actual corpus papers and generating a temporary adaptive skill for each target journal.
-
----
-
-## Documents in This Repo
-
-| File | Purpose |
-|------|---------|
-| `README.md` | This file. Project overview. |
-| `ARCHITECTURE.md` | Full system architecture for developers |
-| `MODULES.md` | Per-module input/output specs |
-| `00_templates/paper_style_card_template.md` | Template: extract style from one paper |
-| `00_templates/journal_style_card_template.md` | Template: aggregate journal norms |
-| `00_templates/skill_template.md` | Template: generate adaptive SKILL.md |
-| `00_templates/revision_log_template.md` | Template: record each revision decision |
-
----
-
-## Folder Structure
-
-```
-期刊匹配writing-skills/
-├── README.md                          ← start here
-├── ARCHITECTURE.md                    ← system design
-├── MODULES.md                         ← module specs
-│
-├── 00_templates/                      ← reusable templates (core deliverable)
-│   ├── paper_style_card_template.md
-│   ├── journal_style_card_template.md
-│   ├── skill_template.md
-│   └── revision_log_template.md
-│
-├── 01_corpus/                         ← journal corpus (per journal)
-│   └── [JOURNAL_NAME]/
-│       ├── raw/                       ← source paper text (.gitignored)
-│       ├── paper_style_cards/         ← AI-extracted style cards
-│       └── corpus_meta.yaml           ← paper list + tags
-│
-├── 02_journal_style/                  ← aggregated journal style
-│   └── [JOURNAL_NAME]/
-│       ├── journal_style_card.md
-│       └── style_extraction_log.md
-│
-├── 03_skills/                         ← generated skills
-│   ├── base/
-│   │   └── econ_writing_base.md       ← general econ writing rules
-│   └── [JOURNAL_NAME]/
-│       └── SKILL_[JOURNAL]_[DATE].md
-│
-├── 04_manuscripts/                    ← active manuscript work
-│   └── [PAPER_SLUG]/
-│       ├── input/                     ← original sections (LaTeX or .txt)
-│       ├── diagnosis/                 ← round 1 output
-│       ├── revised/                   ← round 2 output
-│       └── revision_log/              ← round 3 output
-│
-└── 05_workflow_skills/                ← distilled reusable skills
-    ├── journal_corpus_extraction.md
-    ├── style_card_aggregation.md
-    └── revision_workflow.md
+    style F fill:#f5f0e8,stroke:#999
+    style K fill:#e8f5e9,stroke:#66bb6a
 ```
 
----
+**Phase 1** (runs once per journal): learns writing conventions from corpus → generates ruleset.  
+**Phase 2** (runs per manuscript): applies ruleset → revises and logs every change.
 
-## MVP Scope
-
-One journal. One manuscript. Manual corpus preparation. Local PDF-to-Markdown conversion. Claude Code execution.
-
-**MVP success criteria:**
-- Can convert target journal PDFs and the manuscript PDF into AI-readable Markdown
-- Can extract Paper Style Cards from 5–8 journal papers without copying original text
-- Can aggregate a Journal Style Card with strong/weak signal labeling
-- Can generate a Temporary SKILL.md with explicit priority rules
-- Can run 3-round revision on one manuscript section
-- Can produce a Revision Log with reusability assessments
+You approve the ruleset before Phase 2 begins. Nothing is fully automated.
 
 ---
 
-## For Codex (Developer Instructions)
+## Why not a static writing skill?
 
-Read in this order:
-1. `README.md` (this file) — understand the goal
-2. `ARCHITECTURE.md` — understand the system design and design decisions
-3. `MODULES.md` — understand each module's I/O before implementing
-4. `00_templates/` — implement against these templates exactly
+| | Static skill | journal-adapt |
+|--|-------------|--------------|
+| Rules source | Fixed, general | Extracted from your target journal |
+| Journal coverage | One size fits all | Per-journal, grounded in evidence |
+| Update path | Manual rewrite | Re-run Phase 1 with new papers |
+| Discipline | Fixed | Pluggable base rules per field |
 
-Key constraints to never violate:
-- Paper Style Cards must never contain copied or paraphrased original text
-- Revision output must never add new facts, data, or citations not in the original
-- All LaTeX commands, citation keys, and equations must be preserved verbatim
-- Priority order: Preserve facts > Journal style > General rules > Anti-AI-taste
+Static skills (like econ-write, paper-writing-skill) are excellent general tools. journal-adapt is a different layer on top — it adds journal-specific signal that no static skill can provide.
+
+---
+
+## Priority system
+
+Every revision follows a strict hierarchy:
+
+| Priority | What | Rule |
+|----------|------|------|
+| P1 | Hard preserve | Equations, citation keys, variable names, numerical results — never touched |
+| P2 | Journal style | STRONG-signal patterns from your corpus (≥3 papers agree) |
+| P3 | Discipline base rules | General writing norms for your field |
+| P4 | Always remove | AI-taste phrases, hollow transitions, generic contribution statements |
+
+P2 beats P3. All conflicts logged in the Revision Log.
+
+---
+
+## Prerequisites
+
+**MinerU** — PDF-to-Markdown conversion.
+
+```bash
+pip install mineru
+mineru --version
+```
+
+→ [MinerU install guide](https://github.com/opendatalab/MinerU)
+
+**Claude Code or Codex** with Bash and file tool access.
+
+---
+
+## Installation
+
+```bash
+cp -r skill/ ~/.claude/skills/journal-adapt/
+```
+
+Verify:
+
+```
+~/.claude/skills/journal-adapt/
+├── SKILL.md
+└── base_rules/
+    ├── economics.md
+    ├── ml_cv_nlp.md
+    ├── cs_engineering.md
+    └── general_academic.md
+```
+
+---
+
+## Usage
+
+```
+/journal-adapt
+```
+
+Or say: *"Help me revise my paper for [journal name]."*
+
+The skill asks for:
+1. Target journal name
+2. Folder of journal PDFs (5–8 papers recommended)
+3. Your discipline
+4. Your manuscript file (PDF or Markdown)
+5. Which sections to revise — or "full paper"
+
+---
+
+## Built-in discipline rules (P3)
+
+| Discipline | Conventions |
+|------------|------------|
+| Economics | Cochrane, McCloskey, Shapiro |
+| ML / CV / NLP | NeurIPS, ICML, ACL |
+| CS / Engineering | IEEE, ACM |
+| Other | Bring your own file, or skip |
+
+For unlisted fields: provide any writing guide as a plain text or Markdown file, or skip P3 entirely and rely on journal-specific patterns alone.
+
+---
+
+## Output
+
+Saved to `[manuscript_name]_revised/` next to your manuscript file:
+
+```
+[manuscript_name]_revised/
+├── abstract_revised.md
+├── introduction_revised.md
+├── ...
+├── [section]_revision_log.md    ← per section: what changed and why
+└── revision_summary.md          ← reusable rule candidates across all sections
+```
+
+Markdown output. Transfer to LaTeX or Word yourself, or pipe to another agent.
+
+---
+
+## Example
+
+`examples/ijpe/` shows a complete Phase 1 run for the *International Journal of Production Economics* (8 papers):
+- 8 Paper Style Cards
+- Journal Style Card with STRONG / WEAK signal labels
+- Generated writing rules
+
+Use it to understand what Phase 1 produces before running it on your own journal.
+
+---
+
+## Known limitations
+
+- MinerU required for PDF input. Markdown manuscripts work without it.
+- Table corruption: MinerU sometimes garbles complex tables. Reconstruct from your source before submission.
+- No automatic caching: Phase 1 re-runs each session. To skip it, point to an existing `journal_writing_rules.md` directly.
+- English manuscripts only.
+- No built-in rules for medicine, law, social sciences, or biology. Bring your own file or skip.
+
+---
+
+## Contributing
+
+Pull requests welcome. Most useful: new `base_rules/` files for uncovered disciplines. One file per discipline. Follow the structure of any existing file under `skill/base_rules/`.
+
+---
+
+## License
+
+MIT
