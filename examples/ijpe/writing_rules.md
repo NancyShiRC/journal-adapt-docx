@@ -225,3 +225,4 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 □ Simulation/calibration described as scenario discipline, not proof beyond scope
 □ Roadmap retained
 ```
+
