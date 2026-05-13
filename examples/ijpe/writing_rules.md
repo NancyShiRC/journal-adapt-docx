@@ -58,8 +58,8 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 **Contribution placement:** State the paper's contribution through the decision object and model comparison, not through generic "contributes to the literature" phrasing.
 
 **Guidance:**
-- Name E2W BaaS, battery ownership, contract design, and lifecycle responsibility early.
-- Preview the Stackelberg game and ownership structures without notation.
+- Name the focal service model, the key ownership/contract decision, and lifecycle responsibility early.
+- Preview the game-theoretic model and ownership/contract structures without notation.
 - Mention simulation/calibration as disciplining scenarios, not as external causal proof.
 - Preserve all numerical claims, datasets, and citations if present.
 
@@ -72,21 +72,21 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 **Journal norm:** Operational/sustainability context -> supply-chain consequence -> specific unresolved ownership/coordination/lifecycle gap -> research questions -> model preview -> concrete contributions -> roadmap.
 
-**Opening move:** Begin with E2W battery swapping as an operational setting where downtime, asset utilization, and service network design matter. Move to BaaS quickly.
+**Opening move:** Begin with the focal operational setting where downtime, asset utilization, and service network design matter. Move to the focal service model quickly.
 
-**Problem framing:** State that BaaS changes the battery from a sold component into a circulating lifecycle asset. Make ownership a supply-chain design decision because it assigns capital cost, quality control, residual value, service investment, and recovery responsibility.
+**Problem framing:** State how the focal service model transforms the asset from a sold component into a circulating lifecycle asset. Make ownership a supply-chain design decision because it assigns capital cost, quality control, residual value, service investment, and recovery responsibility.
 
-**Gap statement:** Position the gap as a combined ownership-contract-lifecycle gap. Battery swapping operations, adoption, and routing are not enough because they often leave asset ownership and coordination terms fixed.
+**Gap statement:** Position the gap as a combined ownership-contract-lifecycle gap. Prior work on operations, adoption, and routing is not enough because it often leaves asset ownership and coordination terms fixed.
 
-**Research questions:** Keep the three RQs explicit.
+**Research questions:** Keep your research questions explicit.
 
-**Method preview:** Preview the Stackelberg game and the three ownership structures before discussing simulation and calibration.
+**Method preview:** Preview the game-theoretic model and the ownership/contract structures before discussing simulation and calibration.
 
 **Contribution format:** Use an explicit contribution paragraph or list. Each contribution should map to one concrete element:
 
-- ownership and contract design rather than station-level optimization;
-- lifecycle responsibility and residual value in a BaaS game;
-- analytical ownership preference conditions;
+- the model's primary decision object (ownership and contract design) rather than lower-level operational optimization;
+- lifecycle responsibility and residual value in the game-theoretic model;
+- analytical conditions for ownership/contract preference;
 - data-disciplined simulation and transparent scenario parameters.
 
 **Roadmap:** Retain a standard roadmap paragraph.
@@ -95,7 +95,7 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 **Revision mode:** MED by default.
 
-**Journal norm:** Organize by decision stream and mechanism rather than chronology. Each subsection should end by clarifying what is still unresolved for ownership, coordination, lifecycle responsibility, or calibration in E2W BaaS.
+**Journal norm:** Organize by decision stream and mechanism rather than chronology. Each subsection should end by clarifying what is still unresolved for ownership, coordination, lifecycle responsibility, or calibration in the focal service setting.
 
 **Structure:** thematic stream -> what that stream explains -> what it leaves fixed or external -> how this paper uses or extends the stream.
 
@@ -118,7 +118,7 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 **Entry point:** Start from system boundary and actor roles; then move into assumptions, demand, costs, profit functions, and equilibrium.
 
-**System description:** Make ownership structures comparable by using consistent language for OEM, operator, platform, riders, battery ownership, service level, and lifecycle responsibility.
+**System description:** Make ownership structures comparable by using consistent language for the model actors, ownership/contract terms, service levels, and lifecycle responsibility.
 
 **Exposition style:** Use proposition-then-intuition or result-then-mechanism where possible. Keep equations and notation unchanged.
 
@@ -141,7 +141,7 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 **Narration style:** result/comparison -> mechanism -> implication for ownership, contract, lifecycle responsibility, or service design.
 
-**Comparison structure:** Keep comparisons aligned across integrated benchmark, manufacturer-owned batteries, operator-owned batteries, and platform-coordinated contract where applicable.
+**Comparison structure:** Keep comparisons aligned across the ownership and contract structures in the model where applicable.
 
 **Mechanism emphasis:** Required. Explain why a pattern occurs through price distortion, service investment, recovery responsibility, residual value, or coordination terms.
 
@@ -160,7 +160,7 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 **Journal norm:** Discussion should translate model mechanisms into bounded managerial and policy implications. Claims may reach practice, but only through the model's ownership, contract, service-level, and lifecycle channels.
 
-**Function:** Explain what the results imply for BaaS governance, actor incentives, platform coordination, and recovery responsibility beyond the formal model.
+**Function:** Explain what the results imply for platform governance, actor incentives, service coordination, and recovery responsibility beyond the formal model.
 
 **Scope of claims:** Generalize cautiously. Use "suggests", "indicates", or "is consistent with" when moving from model/simulation to practice.
 
@@ -179,7 +179,7 @@ When running Phase 2 revision, load this SKILL.md only. Do not load corpus paper
 
 **Journal norm:** Concise synthesis of the problem, model comparison, central insight, and bounded implication. The conclusion should not reopen the literature review.
 
-**Function:** Remind readers what decision the model clarifies and why ownership/contract/lifecycle design matters for E2W BaaS.
+**Function:** Remind readers what decision the model clarifies and why the focal ownership/contract/lifecycle decision matters in the study setting.
 
 **Length:** Short to medium. Remove repeated setup if the conclusion restates the introduction.
 
