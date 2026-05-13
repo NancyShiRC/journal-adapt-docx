@@ -3,13 +3,34 @@
 01_corpus/*/converted/
 raw/
 
-# Author's unpublished manuscripts
-04_manuscripts/*/input/
-04_manuscripts/*/converted/
+# Author's unpublished manuscripts — entire folder is private
+04_manuscripts/
 manuscript.pdf
 
-# OS artifacts
-.DS_Store
+# JEM and JEM_CarbonTax — tied to unpublished work
+01_corpus/Journal_of_Environmental_Management/
+01_corpus/Journal_of_Environmental_Management_CarbonTax/
+02_journal_style/Journal_of_Environmental_Management/
+02_journal_style/Journal_of_Environmental_Management_CarbonTax/
+03_skills/Journal_of_Environmental_Management/
+03_skills/Journal_of_Environmental_Management_CarbonTax/
+
+# Claude Code internals
+.claude/
 
 # Local private scripts
 00_local_only/
+
+# OS artifacts
+.DS_Store
+**/.DS_Store
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.spl
