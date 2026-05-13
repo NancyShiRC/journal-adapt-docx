@@ -1,4 +1,4 @@
-# journal-adapt
+# journal-adapt-writing-skill
 
 > **Learn any journal's writing conventions from its published papers. Revise your manuscript to match — section by section.**
 
