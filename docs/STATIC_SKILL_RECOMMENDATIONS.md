@@ -2,7 +2,7 @@
 
 This page lists optional static writing skills that can be used as the base layer for journal-adapt.
 
-These are recommendations, not requirements. Users can skip the static layer, use the bundled base rules, install one of the skills below, or bring any custom `SKILL.md` / writing guide.
+These are recommendations, not requirements. Users can skip the static layer, choose one of the original GitHub projects below, or bring any custom `SKILL.md` / writing guide.
 
 Last checked: 2026-05-15.
 
@@ -12,28 +12,14 @@ Last checked: 2026-05-15.
 
 | User situation | Good default |
 |----------------|--------------|
-| No field-specific need | `skill/base_rules/general_academic.md` bundled with this repo |
-| Economics paper | `hanlulong/econ-writing-skill` or bundled `skill/base_rules/economics.md` |
-| ML / CV / NLP paper | `Master-cai/Research-Paper-Writing-Skills` or bundled `skill/base_rules/ml_cv_nlp.md` |
+| Economics paper | `hanlulong/econ-writing-skill` |
+| ML / CV / NLP paper | `Master-cai/Research-Paper-Writing-Skills` |
 | CS systems / networking / ML-style paper | `SNL-UCSB/paper-writing-skill` |
 | Philosophy or interdisciplinary paper | `lishix520/academic-paper-skills` |
 | Generic AI-writing cleanup | `blader/humanizer` |
 | Advisor or lab has strong preferences | Fork or write your own static skill |
 
-When unsure, start with `general_academic.md`. The dynamic corpus layer will still learn target-journal signals from your primary corpus.
-
----
-
-## Bundled Static Base Rules
-
-These live inside this repository and require no external installation.
-
-| Skill file | Field | Use when |
-|------------|-------|----------|
-| `skill/base_rules/general_academic.md` | General academic writing | You want safe defaults: claim-evidence alignment, no AI-taste phrasing, concise academic prose. |
-| `skill/base_rules/economics.md` | Economics | You write applied, theory, structural, or mixed economics papers. |
-| `skill/base_rules/ml_cv_nlp.md` | ML / CV / NLP | You write machine learning, computer vision, NLP, or AI conference-style papers. |
-| `skill/base_rules/cs_engineering.md` | CS / Engineering | You write engineering or CS papers that need clear system/method/result exposition. |
+When unsure, use a general cleanup skill, bring your own writing guide, or skip the static layer. The dynamic corpus layer will still learn target-journal signals from your primary corpus.
 
 ---
 
@@ -56,17 +42,13 @@ When journal-adapt asks for a static base skill, a user-facing menu can look lik
 ```text
 Choose a static base skill, or skip:
 
-1. General academic writing (bundled) — safest default for most users.
-2. Economics (bundled) — lightweight economics defaults.
-3. ML / CV / NLP (bundled) — lightweight AI conference paper defaults.
-4. CS / Engineering (bundled) — lightweight technical paper defaults.
-5. External economics skill — hanlulong/econ-writing-skill.
-6. External ML/CV/NLP skill — Master-cai/Research-Paper-Writing-Skills.
-7. External research paper skill — SNL-UCSB/paper-writing-skill.
-8. External philosophy/interdisciplinary skill — lishix520/academic-paper-skills.
-9. External generic humanizer — blader/humanizer.
-10. Custom file — provide a path to your own SKILL.md or writing guide.
-11. None — rely only on corpus-derived dynamic rules.
+1. Economics writing — hanlulong/econ-writing-skill.
+2. ML / CV / NLP writing — Master-cai/Research-Paper-Writing-Skills.
+3. CS / research paper writing — SNL-UCSB/paper-writing-skill.
+4. Philosophy / interdisciplinary writing — lishix520/academic-paper-skills.
+5. General AI-writing cleanup — blader/humanizer.
+6. Custom file — provide a path to your own SKILL.md or writing guide.
+7. None — rely only on corpus-derived dynamic rules.
 ```
 
 Keep this menu optional. The project should never require users to install an external skill before using journal-adapt.

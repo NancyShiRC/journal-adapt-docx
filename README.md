@@ -1,68 +1,83 @@
 # journal-adapt-writing-skill
 
-> **A dynamic academic writing skill framework. Combine static writing skills with corpus-derived journal and field signals, then revise a manuscript with an auditable temporary skill.**
+> **A static + dynamic academic writing skill framework. Start with reusable writing rules, then generate a corpus-grounded dynamic skill for one manuscript and one writing destination.**
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 ![Codex](https://img.shields.io/badge/Codex-compatible-green)
 ![Version](https://img.shields.io/badge/version-1.1-brightgreen)
 
-Most academic writing tools are static: they apply one set of rules to every manuscript. That helps with general style, but it misses the local writing culture of a target journal, a field, or a family of high-quality papers.
+There are already many useful **static academic writing skills**: discipline templates, anti-AI phrasing rules, citation/equation safety rules, and general academic style guides. They are valuable, but they usually apply the same rules to every manuscript.
 
-**journal-adapt turns static writing rules into a dynamic, corpus-grounded writing skill.** It reads a user-provided reference corpus, extracts structural and rhetorical writing patterns, combines them with an optional base writing skill, and produces a temporary skill for revising one manuscript section by section.
+The missing piece is **journal adaptation**. Even for the same manuscript, writing for Journal A and writing for Journal B may require different introduction logic, contribution framing, method exposition, result emphasis, and discussion scope. A strong revision workflow should learn from the actual papers that define the target writing destination.
 
-The result is not an auto-writer. It is a reviewable writing workflow: the generated rules are visible, editable, and applied with strict preservation constraints.
+**journal-adapt adds that dynamic layer on top of optional static skills.**
+
+- **Static skills** are reusable base rules: discipline conventions, general academic writing constraints, anti-AI phrasing cleanup, citation/equation safety, or your own lab/advisor guide.
+- **Dynamic skills** are generated for one manuscript and one writing destination from a user-provided corpus: target-journal papers, optional field-top or topic-similar papers, and optional user/lab exemplars.
+
+The result is a visible, editable `dynamic_writing_skill.md`. It does not auto-write a paper; it gives the agent an auditable revision framework for section-by-section academic rewriting.
 
 ---
 
-## What This Project Does
+## Static + Dynamic
 
 ```mermaid
 flowchart TD
-    A[Optional Static Writing Skill] --> D[Dynamic Writing Skill]
-    B[Primary Corpus\nTarget journal papers] --> C[Corpus Style Cards]
-    E[Secondary Corpus\nField top papers or topic-similar papers] --> C
-    F[User Exemplars\noptional lab or author samples] --> C
-    C --> G[Weighted Style Profile]
-    G --> D
-    D --> H[Human Review Gate]
-    H --> I[Manuscript Section]
-    I --> J[Diagnosis]
-    J --> K[Revision]
-    K --> L[Revision Log]
+    A[Optional Static Skills\nreusable base rules] --> E[Dynamic Writing Skill]
+    B[Target Journal Papers\nprimary corpus] --> D[Corpus Style Profile]
+    C[Field-top or Topic-similar Papers\noptional] --> D
+    U[User / Lab Exemplars\noptional] --> D
+    D --> E
+    E --> F[Human Review]
+    F --> G[Section Revision]
+    G --> H[Revision Log]
 
-    style D fill:#e8f5e9,stroke:#4caf50
-    style H fill:#f5f0e8,stroke:#999
+    style E fill:#e8f5e9,stroke:#4caf50
+    style F fill:#f5f0e8,stroke:#999
 ```
 
-The framework has two layers:
+## Optional Static Skills
 
-1. **Static base layer** — optional writing skills that provide general rules.
-2. **Dynamic adaptation layer** — corpus-derived rules that adapt the base layer to a specific journal, field, topic, and manuscript.
+The static layer is optional. You can choose an existing open-source skill, bring your own, or skip this layer.
 
----
+| Static option | Field / purpose | Source |
+|---------------|-----------------|--------|
+| Economics writing | Economics writing and referee-style guidance | [hanlulong/econ-writing-skill](https://github.com/hanlulong/econ-writing-skill) |
+| ML / CV / NLP writing | Research paper writing for ML-style papers | [Master-cai/Research-Paper-Writing-Skills](https://github.com/Master-cai/Research-Paper-Writing-Skills) |
+| CS / research paper writing | Research paper pipeline for CS systems, networking, and ML-adjacent papers | [SNL-UCSB/paper-writing-skill](https://github.com/SNL-UCSB/paper-writing-skill) |
+| Philosophy / interdisciplinary writing | Academic paper planning and composition | [lishix520/academic-paper-skills](https://github.com/lishix520/academic-paper-skills) |
+| General AI-writing cleanup | Generic AI-writing cleanup / humanizing constraints | [blader/humanizer](https://github.com/blader/humanizer) |
 
-## Static Writing Skills Are Optional
+More details: [Static Skill Recommendations](docs/STATIC_SKILL_RECOMMENDATIONS.md).
 
-You can run journal-adapt with or without a base skill.
+You can also use a custom static skill:
 
-| Base input | When to use it |
-|------------|----------------|
-| Discipline-specific open-source writing skills | You want field-aware defaults, such as economics, ML/NLP, engineering, or management writing norms. |
-| Your own writing skill | You already have a lab guide, advisor preference file, previous prompt, or custom `SKILL.md`. |
-| General academic writing skills | You want broad constraints such as anti-AI phrasing, citation preservation, equation safety, or concise academic prose. |
-| No base skill | You want the dynamic corpus signal to drive the revision on its own. |
+| Custom input | Use when |
+|--------------|----------|
+| Your own `SKILL.md` | You already have reusable agent instructions. |
+| Lab/advisor writing guide | Your group has stable style preferences. |
+| Journal or field checklist | You want a lightweight rule sheet instead of a full skill. |
+| No static skill | You want the dynamic corpus to drive the workflow on its own. |
 
-When rules conflict, journal-adapt follows the priority system below.
+## Dynamic Corpus
 
----
+The dynamic corpus is the main feature. It is broader than "papers from the target journal."
+
+| Corpus role | Required? | What it contributes |
+|-------------|-----------|---------------------|
+| **Primary corpus: target-journal papers** | Yes | The journal's local writing culture: structure, contribution framing, method/result exposition, discussion scope. |
+| **Secondary corpus: field-top or topic-similar papers** | Optional | High-quality field writing when the target-journal corpus is small or when the topic needs extra reference points. |
+| **User/lab exemplars** | Optional | Author, advisor, or lab preferences that should be preserved when they do not conflict with the target journal. |
+
+The target journal usually has the highest priority. Optional secondary papers and user/lab exemplars enrich the dynamic skill, but they do not override reviewed target-journal patterns unless the user explicitly chooses that behavior.
 
 ## Priority System
 
 | Priority | Source | Rule |
 |----------|--------|------|
 | P1 | Hard constraints | Preserve facts, citations, equations, notation, numerical results, labels, and author-defined terminology. |
-| P2 | Target journal corpus | Follow strong target-journal patterns. |
+| P2 | Target journal corpus | Follow reviewed target-journal patterns. |
 | P3 | Secondary corpus and exemplars | Use high-quality field patterns or user/lab preferences when target-journal evidence is absent or weak. |
 | P4 | Static base skill | Apply discipline or general writing rules when corpus signals do not decide. |
 | P5 | Cleanup rules | Remove AI-taste phrases, hollow transitions, generic contributions, and unsupported overclaims. |
@@ -71,17 +86,17 @@ P1 always wins. P2 usually beats P3 and P4. Any conflict that changes revision b
 
 ---
 
-## Corpus Design
+## Corpus Preparation
 
-The reference corpus does not have to be limited to the target journal.
+Recommended starting point:
 
-| Corpus role | Recommended size | Required? | Purpose |
-|-------------|------------------|-----------|---------|
-| Primary corpus: target journal papers | 5-8 papers | Yes | Learns the target journal's local writing conventions. |
-| Secondary corpus: field top papers | 2-5 papers | Optional | Adds high-quality field writing patterns when relevant to the manuscript topic or method. |
-| User/lab exemplars | 1-3 documents | Optional | Captures local author, advisor, or lab preferences. |
+| Corpus role | Recommended size |
+|-------------|------------------|
+| Primary corpus: target-journal papers | 5-8 papers |
+| Secondary corpus: field-top or topic-similar papers | 2-5 papers |
+| User/lab exemplars | 1-3 documents |
 
-The target journal should usually receive the highest weight. Secondary corpus files and user/lab exemplars are optional; they help when the target journal corpus is small, mixed, or methodologically thin, or when the user wants to preserve a known writing preference.
+All corpus files should be fully readable Markdown/text before Phase 1. If a PDF conversion is incomplete, retry conversion, use another converter, provide clean Markdown/text, or replace the paper.
 
 ---
 
