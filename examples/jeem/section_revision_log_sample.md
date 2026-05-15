@@ -17,10 +17,10 @@ The revision sharpened target-journal fit by foregrounding the mechanism, tighte
 | Paragraph type | Problem type | Rule source | Revision action |
 |----------------|--------------|-------------|-----------------|
 | Opening | Journal fit | target-journal | Named the policy-design problem earlier. |
-| Literature bridge | Structure | target-journal + static-base | Converted literature summary into mechanism positioning. |
+| Literature bridge | Structure | target-journal | Converted literature summary into mechanism positioning. |
 | Gap | Logic | target-journal | Reframed the gap as an unresolved decision margin. |
-| Model preview | Style | target-journal | Made the welfare criterion and benchmark comparison visible earlier. |
-| Contributions | Style | target-journal + static-base | Rewrote contributions as concrete claims tied to model and evidence. |
+| Model preview | Style | target-journal | Made the evaluation criterion and benchmark comparison visible earlier. |
+| Contributions | Style | target-journal | Rewrote contributions as concrete claims tied to design and evidence. |
 
 ---
 

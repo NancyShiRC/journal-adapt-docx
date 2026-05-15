@@ -1,25 +1,26 @@
 # Example: JEEM Dynamic Writing Skill MVP (Anonymized)
 
-This example shows an anonymized MVP run of the revised journal-adapt workflow.
+This folder is a public sample of what a journal-adapt run looks like before manuscript revision.
 
 Target journal: **Journal of Environmental Economics and Management (JEEM)**  
-Manuscript: anonymized working paper on carbon pricing and distributional policy  
+Manuscript: anonymized working paper, details redacted  
 Status: public example, sanitized
 
-No unpublished manuscript text, author names, private file paths, exact numerical findings, or manuscript-specific model details are included.
+This example keeps the workflow, input structure, paper-level style cards, aggregated writing table, and generated dynamic skill. It removes unpublished manuscript text, author names, private file paths, exact manuscript results, and manuscript-specific model details.
 
 ---
 
-## What This Example Demonstrates
+## What This Example Shows
 
-This example tests the new dynamic framework:
+This sample is for users who want to know: "What do I need to input, and what does the skill produce?"
 
-1. **Primary corpus:** JEEM papers are used to learn target-journal writing patterns.
-2. **Secondary corpus:** non-JEEM but field-relevant papers are optional support, not target-journal evidence.
-3. **Static base skill:** the bundled economics base rules provide fallback writing rules.
-4. **Conversion gate:** only fully readable converted files enter Phase 1.
-5. **Dynamic skill:** Phase 1 generates a reviewable `dynamic_writing_skill.md`.
-6. **Section revision:** Phase 2 revises a manuscript section using only the dynamic skill and the manuscript section.
+It shows:
+
+1. **Each stage of the workflow**: conversion gate, corpus review, paper style cards, aggregated profile, dynamic skill, and redacted Phase 2 sample.
+2. **What was input**: six JEEM papers as the primary corpus, nine field/topical papers as optional secondary corpus, and one anonymized manuscript.
+3. **What each paper card looks like**: one style card per reference paper, focused on structure and rhetorical moves rather than copied content.
+4. **What the final writing table looks like**: a compact table translating corpus patterns into revision rules.
+5. **What is not shown**: the private manuscript topic, full manuscript text, real revised paragraphs, private file paths, or unpublished results.
 
 ---
 
@@ -29,7 +30,11 @@ This example tests the new dynamic framework:
 |------|---------|
 | `corpus_meta.yaml` | Public corpus-role metadata for the anonymized MVP. |
 | `conversion_report.md` | Shows the conversion gate and retry rule. |
+| `workflow_walkthrough.md` | Stage-by-stage sample run. |
+| `style_extraction_log.md` | What was extracted, excluded, and redacted. |
+| `paper_style_cards/` | Per-paper style cards for all primary and secondary corpus papers. |
 | `style_profile.md` | Aggregated JEEM and secondary-corpus writing patterns. |
+| `writing_pattern_table.md` | Final writing-pattern table used to build the dynamic skill. |
 | `dynamic_writing_skill.md` | The generated anonymized dynamic writing skill. |
 | `section_diagnosis_sample.md` | Sanitized sample diagnosis for one manuscript section. |
 | `section_revision_sample.md` | Sanitized before/after example using placeholder text. |
@@ -43,10 +48,10 @@ Raw PDFs, converted full texts, and the manuscript are not included.
 
 The MVP used:
 
-- JEEM papers as the **primary target-journal corpus**;
-- field-relevant papers from environmental economics, climate economics, and policy journals as the **optional secondary corpus**;
-- bundled economics rules as the **static base skill**;
-- no user/lab exemplars.
+- six JEEM papers as the **primary target-journal corpus**;
+- nine field-relevant papers from environmental economics, climate economics, and climate-policy journals as the **optional secondary corpus**;
+- no user/lab exemplars;
+- no public manuscript text.
 
 Secondary-corpus patterns are not allowed to override reviewed JEEM patterns unless the user explicitly chooses that behavior.
 
@@ -58,7 +63,10 @@ This example is intentionally anonymized. It keeps:
 
 - workflow structure;
 - corpus-role logic;
+- public reference titles;
+- per-paper style-card format;
 - target-journal writing patterns;
+- final writing-pattern table;
 - dynamic-skill format;
 - sanitized revision examples.
 
@@ -71,4 +79,4 @@ It removes:
 - manuscript-specific model names and variables;
 - full paragraph rewrites from the unpublished manuscript.
 
-Use this folder as a public demonstration of the revised workflow, not as evidence about the private working paper.
+Use this folder as a public demonstration of the revised workflow and output types, not as evidence about the private working paper.

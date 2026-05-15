@@ -1,10 +1,18 @@
 # Dynamic Writing Skill: JEEM MVP (Anonymized)
 
 Target journal: Journal of Environmental Economics and Management  
-Manuscript type: anonymized working paper on carbon pricing and distributional policy  
-Static base skill: `skill/base_rules/economics.md`  
+Manuscript type: anonymized working paper; topic, model details, results, and author information redacted  
+Static base skill: none in public MVP sample  
 Secondary corpus: optional field/topical papers  
 User/lab exemplars: none
+
+---
+
+Generated from:
+
+- paper style cards in [`paper_style_cards/`](paper_style_cards/);
+- aggregated profile in [`style_profile.md`](style_profile.md);
+- final writing table in [`writing_pattern_table.md`](writing_pattern_table.md).
 
 ---
 
@@ -41,9 +49,11 @@ Use optional secondary-corpus patterns only when they support, rather than overr
 - distributional-policy writing should separate burden, recycling, welfare, and feasibility channels;
 - field-top papers can help clarify the welfare criterion or decision margin.
 
-### P4 — Static Base Skill
+### P4 — Optional Static Base Skill
 
-Use bundled economics defaults when corpus patterns do not decide:
+If the user provides a static writing skill, apply it only when corpus patterns do not decide. In this public MVP sample, no static skill is shown.
+
+Recommended fallback behavior:
 
 - one main claim per paragraph;
 - claim before evidence;
