@@ -1,186 +1,221 @@
 # journal-adapt-writing-skill
 
-> **Learn any journal's writing conventions from its published papers. Revise your manuscript to match — section by section.**
+> **A dynamic academic writing skill framework. Combine static writing skills with corpus-derived journal and field signals, then revise a manuscript with an auditable temporary skill.**
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 ![Codex](https://img.shields.io/badge/Codex-compatible-green)
-![Version](https://img.shields.io/badge/version-1.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.1-brightgreen)
 
-You know what your paper says. Getting it past reviewers at a specific journal is where it stalls.
+Most academic writing tools are static: they apply one set of rules to every manuscript. That helps with general style, but it misses the local writing culture of a target journal, a field, or a family of high-quality papers.
 
-Every journal has unwritten rules — how introductions are framed, how contributions are stated, how deep the policy discussion should go. Most writing skills give you general rules. But general rules don't know that *IJPE* prefers embedded prose over numbered lists, or that *Management Science* opens with a puzzle not a literature gap.
+**journal-adapt turns static writing rules into a dynamic, corpus-grounded writing skill.** It reads a user-provided reference corpus, extracts structural and rhetorical writing patterns, combines them with an optional base writing skill, and produces a temporary skill for revising one manuscript section by section.
 
-**journal-adapt learns those rules from the journal itself.** It reads published papers from your target journal, extracts their writing conventions, and generates a custom revision ruleset. Then it uses that ruleset to revise your manuscript — section by section, paragraph by paragraph.
-
-Same pipeline. Any journal.
+The result is not an auto-writer. It is a reviewable writing workflow: the generated rules are visible, editable, and applied with strict preservation constraints.
 
 ---
 
-## How it works
+## What This Project Does
 
 ```mermaid
 flowchart TD
-    A[Journal PDFs\n5–8 papers] --> B[PDF → Markdown\nMinerU]
-    B --> C[Per-paper Style Cards\nstructure + rhetoric only]
-    C --> D[Journal Style Card\nSTRONG / WEAK signal]
-    D --> E[Journal Writing Rules\nyour custom ruleset]
-    E --> F{You review\nand confirm}
-    F --> G[Your Manuscript\nPDF or Markdown]
-    G --> H[Diagnosis\nper paragraph]
-    H --> I[Revision\npriority rules applied]
-    I --> J[Revision Log\nwhat changed and why]
-    J --> K[Revised Markdown\nready for LaTeX or Word]
+    A[Optional Static Writing Skill] --> D[Dynamic Writing Skill]
+    B[Primary Corpus\nTarget journal papers] --> C[Corpus Style Cards]
+    E[Secondary Corpus\nField top papers or topic-similar papers] --> C
+    F[User Exemplars\noptional lab or author samples] --> C
+    C --> G[Weighted Style Profile]
+    G --> D
+    D --> H[Human Review Gate]
+    H --> I[Manuscript Section]
+    I --> J[Diagnosis]
+    J --> K[Revision]
+    K --> L[Revision Log]
 
-    style F fill:#f5f0e8,stroke:#999
-    style K fill:#e8f5e9,stroke:#66bb6a
+    style D fill:#e8f5e9,stroke:#4caf50
+    style H fill:#f5f0e8,stroke:#999
 ```
 
-**Phase 1** (runs once per journal): learns writing conventions from corpus → generates ruleset.  
-**Phase 2** (runs per manuscript): applies ruleset → revises and logs every change.
+The framework has two layers:
 
-You approve the ruleset before Phase 2 begins. Nothing is fully automated.
-
----
-
-## Why not a static writing skill?
-
-| | Static skill | journal-adapt |
-|--|-------------|--------------|
-| Rules source | Fixed, general | Extracted from your target journal |
-| Journal coverage | One size fits all | Per-journal, grounded in evidence |
-| Update path | Manual rewrite | Re-run Phase 1 with new papers |
-| Discipline | Fixed | Pluggable base rules per field |
-
-Static skills (like econ-write, paper-writing-skill) are excellent general tools. journal-adapt is a different layer on top — it adds journal-specific signal that no static skill can provide.
+1. **Static base layer** — optional writing skills that provide general rules.
+2. **Dynamic adaptation layer** — corpus-derived rules that adapt the base layer to a specific journal, field, topic, and manuscript.
 
 ---
 
-## Priority system
+## Static Writing Skills Are Optional
 
-Every revision follows a strict hierarchy:
+You can run journal-adapt with or without a base skill.
 
-| Priority | What | Rule |
-|----------|------|------|
-| P1 | Hard preserve | Equations, citation keys, variable names, numerical results — never touched |
-| P2 | Journal style | STRONG-signal patterns from your corpus (≥3 papers agree) |
-| P3 | Discipline base rules | General writing norms for your field |
-| P4 | Always remove | AI-taste phrases, hollow transitions, generic contribution statements |
+| Base input | When to use it |
+|------------|----------------|
+| Discipline-specific open-source writing skills | You want field-aware defaults, such as economics, ML/NLP, engineering, or management writing norms. |
+| Your own writing skill | You already have a lab guide, advisor preference file, previous prompt, or custom `SKILL.md`. |
+| General academic writing skills | You want broad constraints such as anti-AI phrasing, citation preservation, equation safety, or concise academic prose. |
+| No base skill | You want the dynamic corpus signal to drive the revision on its own. |
 
-P2 beats P3. All conflicts logged in the Revision Log.
+When rules conflict, journal-adapt follows the priority system below.
 
 ---
 
-## Prerequisites
+## Priority System
 
-**MinerU** — PDF-to-Markdown conversion.
+| Priority | Source | Rule |
+|----------|--------|------|
+| P1 | Hard constraints | Preserve facts, citations, equations, notation, numerical results, labels, and author-defined terminology. |
+| P2 | Target journal corpus | Follow strong target-journal patterns. |
+| P3 | Secondary corpus and exemplars | Use high-quality field patterns or user/lab preferences when target-journal evidence is absent or weak. |
+| P4 | Static base skill | Apply discipline or general writing rules when corpus signals do not decide. |
+| P5 | Cleanup rules | Remove AI-taste phrases, hollow transitions, generic contributions, and unsupported overclaims. |
+
+P1 always wins. P2 usually beats P3 and P4. Any conflict that changes revision behavior should be recorded in the revision log.
+
+---
+
+## Corpus Design
+
+The reference corpus does not have to be limited to the target journal.
+
+| Corpus role | Recommended size | Required? | Purpose |
+|-------------|------------------|-----------|---------|
+| Primary corpus: target journal papers | 5-8 papers | Yes | Learns the target journal's local writing conventions. |
+| Secondary corpus: field top papers | 2-5 papers | Optional | Adds high-quality field writing patterns when relevant to the manuscript topic or method. |
+| User/lab exemplars | 1-3 documents | Optional | Captures local author, advisor, or lab preferences. |
+
+The target journal should usually receive the highest weight. Secondary corpus files and user/lab exemplars are optional; they help when the target journal corpus is small, mixed, or methodologically thin, or when the user wants to preserve a known writing preference.
+
+---
+
+## Quick Start
+
+### 1. Install the skill
+
+For Claude Code:
 
 ```bash
-pip install mineru
-mineru --version
+mkdir -p ~/.claude/skills/journal-adapt
+cp -R skill/* ~/.claude/skills/journal-adapt/
 ```
 
-→ [MinerU install guide](https://github.com/opendatalab/MinerU)
+For Codex, copy or symlink the `skill/` folder into your Codex skills directory if your local setup supports custom skills. You can also keep the repository open and ask Codex to use `skill/SKILL.md` directly.
 
-**Claude Code or Codex** with Bash and file tool access.
+More detail: [Installation and PDF Conversion](docs/INSTALLATION.md).
 
----
+### 2. Prepare inputs
 
-## Installation
+Minimum Markdown workflow, no MinerU required:
 
-```bash
-cp -r skill/ ~/.claude/skills/journal-adapt/
+```text
+my_project/
+├── corpus/
+│   ├── target_journal_001.md
+│   ├── target_journal_002.md
+│   └── field_top_paper_001.md
+└── manuscript.md
 ```
 
-Verify:
+PDF workflow:
 
-```
-~/.claude/skills/journal-adapt/
-├── SKILL.md
-└── base_rules/
-    ├── economics.md
-    ├── ml_cv_nlp.md
-    ├── cs_engineering.md
-    └── general_academic.md
+```text
+my_project/
+├── corpus_pdfs/
+│   ├── paper_001.pdf
+│   └── paper_002.pdf
+└── manuscript.pdf
 ```
 
----
+PDF input requires a PDF-to-Markdown converter. MinerU is supported, but Markdown input is the recommended path if MinerU is hard to install.
 
-## Usage
+### 3. Invoke
 
-```
+```text
 /journal-adapt
 ```
 
-Or say: *"Help me revise my paper for [journal name]."*
+Or ask:
 
-The skill asks for:
-1. Target journal name
-2. Folder of journal PDFs (5–8 papers recommended)
-3. Your discipline
-4. Your manuscript file (PDF or Markdown)
-5. Which sections to revise — or "full paper"
+```text
+Help me build a dynamic writing skill for my manuscript using these target-journal papers and this base writing skill.
+```
 
----
+The skill will ask for:
 
-## Built-in discipline rules (P3)
-
-| Discipline | Conventions |
-|------------|------------|
-| Economics | Cochrane, McCloskey, Shapiro |
-| ML / CV / NLP | NeurIPS, ICML, ACL |
-| CS / Engineering | IEEE, ACM |
-| Other | Bring your own file, or skip |
-
-For unlisted fields: provide any writing guide as a plain text or Markdown file, or skip P3 entirely and rely on journal-specific patterns alone.
+1. Target journal or writing destination
+2. Primary corpus folder
+3. Optional secondary corpus folder
+4. Optional user/lab exemplar files
+5. Optional base writing skill
+6. Manuscript file
+7. Sections to revise
 
 ---
 
 ## Output
 
-Saved to `[manuscript_name]_revised/` next to your manuscript file:
+Saved next to the manuscript:
 
-```
+```text
 [manuscript_name]_revised/
+├── dynamic_writing_skill.md
+├── style_profile.md
 ├── abstract_revised.md
 ├── introduction_revised.md
 ├── ...
-├── [section]_revision_log.md    ← per section: what changed and why
-└── revision_summary.md          ← reusable rule candidates across all sections
+├── [section]_revision_log.md
+└── revision_summary.md
 ```
 
-Markdown output. Transfer to LaTeX or Word yourself, or pipe to another agent.
+The revised files are Markdown. Move them into LaTeX, Word, or another writing environment after review.
 
 ---
 
 ## Example
 
-`examples/ijpe/` shows a complete Phase 1 run for the *International Journal of Production Economics* (8 papers):
-- 8 Paper Style Cards
-- Journal Style Card with STRONG / WEAK signal labels
-- Generated writing rules
+`examples/jeem/` shows an anonymized MVP run for the Journal of Environmental Economics and Management:
 
-Use it to understand what Phase 1 produces before running it on your own journal.
+- corpus-role metadata
+- conversion gate report
+- aggregated style profile
+- generated dynamic writing skill
+- sanitized section diagnosis, revision sample, and revision log
+
+Raw PDFs, converted full text, and the private manuscript are not included.
 
 ---
 
-## Known limitations
+## Documentation
 
-- MinerU required for PDF input. Markdown manuscripts work without it.
-- Table corruption: MinerU sometimes garbles complex tables. Reconstruct from your source before submission.
-- No automatic caching: Phase 1 re-runs each session. To skip it, point to an existing `journal_writing_rules.md` directly.
-- English manuscripts only.
-- No built-in rules for medicine, law, social sciences, or biology. Bring your own file or skip.
+- [Installation and PDF Conversion](docs/INSTALLATION.md)
+- [Static Skill Recommendations](docs/STATIC_SKILL_RECOMMENDATIONS.md)
+- [System Architecture](docs/ARCHITECTURE.md)
+- [Module Specifications](docs/MODULES.md)
+- [Templates](docs/templates/)
+
+---
+
+## Known Limitations
+
+- English-language academic writing only.
+- PDF conversion quality depends on the converter. MinerU can fail on some local setups.
+- The project extracts writing structure and rhetorical patterns only. It must not quote or paraphrase copyrighted corpus papers.
+- The generated dynamic skill needs human review before revision begins.
+- The tool does not add facts, citations, results, or claims that are not already in the manuscript.
 
 ---
 
 ## Contributing
 
-Pull requests welcome. Most useful: new `base_rules/` files for uncovered disciplines. One file per discipline. Follow the structure of any existing file under `skill/base_rules/`.
+Useful contributions include:
+
+- new static base writing skills for disciplines not covered here
+- better installation paths for Claude Code, Codex, and other agent environments
+- safer PDF-to-Markdown conversion recipes
+- more anonymized example corpora
+- improvements to style-card and revision-log templates
+
+One base skill per file is preferred. Keep example corpora free of copyrighted full text and unpublished manuscript details.
 
 ---
 
 ## License
 
 MIT
-

@@ -1,0 +1,32 @@
+example: "jeem_dynamic_writing_skill_mvp_anonymized"
+target_journal: "Journal of Environmental Economics and Management"
+manuscript_description: "Anonymized working paper on carbon pricing and distributional policy"
+static_base_skill: "skill/base_rules/economics.md"
+user_lab_exemplars: "none"
+privacy_status: "anonymized_public_example"
+
+conversion_policy:
+  accepted_input: "fully readable converted text"
+  partial_conversion: "retry_or_replace"
+  failed_conversion: "retry_or_replace"
+  note: "Partial and failed conversions do not enter Phase 1."
+
+primary_corpus:
+  role: "target_journal"
+  journal: "Journal of Environmental Economics and Management"
+  paper_count_used_in_mvp: 6
+  public_description: "JEEM papers on carbon pricing, revenue recycling, inequality, welfare criteria, and climate-policy design."
+
+secondary_corpus:
+  role: "optional_field_or_topic_support"
+  paper_count_used_in_mvp: 9
+  public_description: "Field-relevant papers from environmental economics, climate economics, public economics, and climate-policy journals."
+  rule: "Secondary-corpus patterns support interpretation but do not override reviewed JEEM patterns."
+
+outputs:
+  - conversion_report.md
+  - style_profile.md
+  - dynamic_writing_skill.md
+  - section_diagnosis_sample.md
+  - section_revision_sample.md
+  - section_revision_log_sample.md

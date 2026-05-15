@@ -20,6 +20,7 @@ manuscript.pdf
 
 # Local private scripts
 00_local_only/
+HANDOVER*.md
 
 # OS artifacts
 .DS_Store
@@ -34,4 +35,3 @@ manuscript.pdf
 *.log
 *.out
 *.spl
-
