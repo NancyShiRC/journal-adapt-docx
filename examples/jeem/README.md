@@ -6,7 +6,7 @@ Target journal: **Journal of Environmental Economics and Management (JEEM)**
 Manuscript: anonymized working paper, details redacted  
 Status: public example, sanitized
 
-This example keeps the workflow, input structure, paper-level style cards, aggregated writing table, and generated dynamic skill. It removes unpublished manuscript text, author names, private file paths, exact manuscript results, and manuscript-specific model details.
+This example keeps the workflow, input structure, paper-level style cards, aggregated writing table, and generated dynamic skill. 
 
 ---
 
@@ -78,5 +78,3 @@ It removes:
 - exact calibrated numbers;
 - manuscript-specific model names and variables;
 - full paragraph rewrites from the unpublished manuscript.
-
-Use this folder as a public demonstration of the revised workflow and output types, not as evidence about the private working paper.
