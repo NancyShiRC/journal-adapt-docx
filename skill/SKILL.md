@@ -297,87 +297,159 @@ Save to: `[corpus_folder]/_style_cards/journal_style_card.md`
 
 Read the Style Profile, optional secondary-corpus observations, optional user/lab exemplar observations, and the selected static base writing rules if present. Generate a `dynamic_writing_skill.md` file that consolidates all revision guidance for Phase 2.
 
+The generated `dynamic_writing_skill.md` must be bilingual for user review:
+- Keep the English rule text as the authoritative execution rule.
+- After each paragraph, bullet, table row, or short rule block in English, add a Chinese counterpart immediately below it.
+- Mark the Chinese counterpart with `中文：`.
+- The Chinese text is only for the user's reading and confirmation. It must not add, remove, soften, strengthen, or reinterpret any rule.
+- If an English rule contains protected technical text, citation syntax, LaTeX commands, field-code cautions, file names, or command examples, preserve those items exactly in the Chinese explanation.
+- If an exact Chinese explanation is hard to write without changing the meaning, keep the English rule unchanged and add `中文：同上，保持原意。`
+- Phase 2 must follow the English rules as the source of truth. Use the Chinese text only to help the user review the temporary skill.
+
 **dynamic_writing_skill.md format:**
 
 ```
 # Dynamic Writing Skill: [WRITING DESTINATION]
+中文：[写作目标]动态写作规则
+
 Generated: [DATE]
+中文：生成日期：[DATE]
 Primary corpus papers analyzed: [N]
+中文：已分析的主要语料论文数量：[N]
 Secondary corpus papers analyzed: [N or 0]
+中文：已分析的次要语料论文数量：[N or 0]
 User/lab exemplars analyzed: [N or 0]
+中文：已分析的用户/课题组范文数量：[N or 0]
 Static base skill: [file name or none]
+中文：静态基础规则：[file name or none]
 
 ## PRIORITY RULES (Non-Negotiable)
+中文：优先级规则（不可协商）
 
 ### Priority 1 — HARD PRESERVE
+中文：优先级 1 — 必须严格保留
 Never modify:
+中文：不得修改：
 - All \cite{} commands and citation keys
+  中文：所有 \cite{} 命令和 citation keys
 - All LaTeX math environments
+  中文：所有 LaTeX 数学环境
 - All variable names and mathematical notation
+  中文：所有变量名和数学符号
 - All numerical results and quantitative claims
+  中文：所有数值结果和定量表述
 - All footnote content
+  中文：所有脚注内容
 - All figure/table references (\ref{}, \label{})
+  中文：所有图表引用（\ref{}、\label{}）
 - All model names, dataset names, proper nouns
+  中文：所有模型名称、数据集名称和专有名词
 
 ### Priority 2 — TARGET JOURNAL PATTERNS
+中文：优先级 2 — 目标期刊写作模式
 [Paste the reviewed target-journal patterns from the primary corpus, formatted as actionable rules]
+中文：[粘贴已审核的目标期刊语料模式，写成可执行规则；不得改变英文规则含义]
 
 ### Priority 3 — SECONDARY CORPUS / EXEMPLAR FOLLOW
+中文：优先级 3 — 次要语料/范文参考
 [Paste relevant high-quality field, topic-similar, user, advisor, or lab writing patterns. Apply when P2 is absent, weak, or underspecified.]
+中文：[粘贴相关的高质量领域、相似主题、用户、导师或课题组写作模式；仅在 P2 缺失、较弱或不够具体时使用；不得改变英文规则含义]
 
 ### Priority 4 — STATIC BASE SKILL DEFAULT
+中文：优先级 4 — 静态基础规则默认项
 Apply when P2 and P3 have no guidance on a dimension.
+中文：当 P2 和 P3 对某一维度没有指导时应用。
 [Paste relevant rules from the selected static base skill, if any]
+中文：[粘贴所选静态基础规则中的相关规则；不得改变英文规则含义]
 
 ### Priority 5 — ALWAYS REMOVE
+中文：优先级 5 — 始终删除
 Remove regardless of other rules:
+中文：无论其他规则如何，都删除：
 - "This paper explores..." / "In this study, we aim to..."
+  中文：删除 "This paper explores..." / "In this study, we aim to..." 这类表达
 - "It is worth noting that..." / "It should be noted that..."
+  中文：删除 "It is worth noting that..." / "It should be noted that..." 这类表达
 - "Furthermore," / "Moreover," / "Additionally," used as empty transitions
+  中文：删除作为空泛过渡的 "Furthermore," / "Moreover," / "Additionally,"
 - "contributes to the growing literature on..."
+  中文：删除 "contributes to the growing literature on..." 这类表达
 - "Future research should explore..."
+  中文：删除 "Future research should explore..." 这类表达
 - "Taken together, these findings suggest..."
+  中文：删除 "Taken together, these findings suggest..." 这类表达
 - "Our results highlight the importance of..."
+  中文：删除 "Our results highlight the importance of..." 这类表达
 
 ## SECTION-SPECIFIC GUIDANCE
+中文：分节写作指导
 
 ### Abstract
+中文：摘要
 [Journal-specific structure, tense, length, contribution placement]
+中文：[目标期刊特定的结构、时态、长度和贡献位置说明；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ### Introduction
+中文：引言
 [Required sequence, hook type, contribution format, literature positioning, roadmap]
+中文：[要求的论述顺序、开篇方式、贡献表达形式、文献定位和路线图；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ### Literature Review
+中文：文献综述
 [Structure, positioning move, citation density, common failure modes]
+中文：[结构、定位方式、引用密度和常见问题；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ### Methods / Model
+中文：方法/模型
 [Entry point, notation density, exposition style, assumption justification]
+中文：[切入方式、符号密度、阐述风格和假设说明方式；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ### Results
+中文：结果
 [Narration style, mechanism emphasis, robustness framing, quantitative claim style]
+中文：[叙述风格、机制强调、稳健性表述和定量结论表达方式；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ### Discussion
+中文：讨论
 [Function, scope of claims, policy language register, limitation acknowledgment]
+中文：[功能、结论范围、政策语言风格和局限性承认方式；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ### Conclusion
+中文：结论
 [Function, length, future research norms]
+中文：[功能、长度和未来研究表述规范；不得改变英文规则含义]
 Do not: [journal-specific anti-patterns]
+中文：不要：[目标期刊特定的反模式；不得改变英文规则含义]
 
 ## CAUTIONS AND CONFLICTS
+中文：注意事项和规则冲突
 [List patterns that are contested, corpus-specific, or likely to conflict with the static base skill. Apply only after human review.]
+中文：[列出存在争议、仅限特定语料、或可能与静态基础规则冲突的模式；只有经人工审核后才应用；不得改变英文规则含义]
 
 ## LANGUAGE REGISTER
+中文：语言风格
 - Voice: [instruction]
+  中文：语态/主语选择：[说明；不得改变英文规则含义]
 - Sentence length: [instruction]
+  中文：句长：[说明；不得改变英文规则含义]
 - Hedging: [when to use / when not to]
+  中文：谨慎措辞：[何时使用/何时不使用；不得改变英文规则含义]
 - Transitions: [preferred style]
+  中文：过渡方式：[偏好的风格；不得改变英文规则含义]
 - Mathematical prose: [how to introduce equations]
+  中文：数学/公式相关文字：[如何引入公式；不得改变英文规则含义]
 ```
 
 Save to: `[manuscript_folder]/dynamic_writing_skill.md`.
@@ -389,6 +461,7 @@ Save to: `[manuscript_folder]/dynamic_writing_skill.md`.
 Display the generated `dynamic_writing_skill.md` to the user. Say:
 
 > Phase 1 complete. This is the dynamic writing skill I will apply to your manuscript.
+> The English rules are the execution source of truth. The Chinese lines are included only to help you read and confirm the rules.
 > Please review them. You can edit the file directly if anything is wrong.
 > Reply "confirmed" when ready to proceed, or tell me what to change.
 
