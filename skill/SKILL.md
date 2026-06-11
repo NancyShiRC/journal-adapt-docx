@@ -1,6 +1,6 @@
 ---
 name: journal-adapt
-description: "Dynamic academic writing skill generator. Combines optional static writing skills with target-journal, field-top, or user-provided reference corpora, then revises a manuscript with a reviewable temporary skill. Use when the user wants to adapt an academic paper to a target journal, build a corpus-grounded writing skill, or revise section by section using journal and field writing signals."
+description: "Dynamic academic writing skill generator. Combines optional static writing skills with target-journal, field-top, or user-provided reference corpora, then revises a manuscript with a reviewable temporary skill. Use when the user wants to adapt an academic paper to a target journal, build a corpus-grounded writing skill, revise section by section using journal and field writing signals, or revise a Word/DOCX manuscript while preserving EndNote/Cite While You Write fields through WPS tracked changes."
 argument-hint: "e.g. 'build a dynamic writing skill for my manuscript using these journal papers' or 'help me revise my paper for JEEM'"
 user-invocable: true
 ---
@@ -25,16 +25,21 @@ These override everything else. Never violate them.
 1. **Never add facts.** Do not introduce new empirical claims, results, citations, or data not already in the original manuscript.
 2. **Never change technical content.** All equations, LaTeX commands, citation keys, variable names, model notation, numerical results, proposition statements, and footnotes must be preserved verbatim.
 3. **Never paraphrase corpus papers.** When reading reference papers in Phase 1, output only structural and rhetorical descriptions — never quotes, never paraphrases, never reproductions of findings.
-4. **One section at a time.** In Phase 2, revise and output one section fully before moving to the next.
+4. **Protect Word citation fields.** For manuscript files in `.doc`, `.docx`, or other Word formats, do not convert the working manuscript to Markdown, plain text, HTML, PDF, or rebuilt DOCX if the user needs EndNote, Cite While You Write, Zotero, Mendeley, Word cross-reference, bibliography, automatic numbering, table/figure caption, or field-code preservation. These conversions can preserve visible citation text while destroying field codes, library links, automatic numbering, and CWYW metadata.
+5. **Revise Word manuscripts by tracked changes on a duplicate.** For Word-format manuscripts, create or ask WPS/Word to create a separate copy, enable tracked changes/revision mode in that copy, and make all wording edits in place in the duplicate. Never modify the user's original file.
+6. **One section at a time.** In Phase 2, revise and output one section fully before moving to the next.
 
 ---
 
 # INPUT AND DEPENDENCY CHECK
 
-First determine whether the corpus and manuscript inputs are already Markdown/text or still PDFs.
+First determine the format and role of each input.
 
-- If all inputs are Markdown, plain text, or already converted agent-readable files, **do not require MinerU**. Proceed directly to Phase 1.
-- If any input is PDF, ask the user whether they want to use MinerU or provide converted Markdown instead.
+- For reference corpus files, Markdown/text is preferred. If corpus files are PDFs, ask the user whether they want to use MinerU or provide converted Markdown instead.
+- For manuscript files, choose the workflow by source format:
+  - Markdown/text/LaTeX: edit text outputs normally.
+  - PDF: convert with MinerU only if the user accepts Markdown/text revision output.
+  - Word `.doc`/`.docx`: use the DOCX tracked-changes workflow below. Do not convert the working manuscript to Markdown when the user needs citation fields or Word automation preserved.
 
 For PDF input with MinerU, verify installation:
 
@@ -47,6 +52,28 @@ If this command fails, do not stop the whole workflow. Tell the user:
 > MinerU is only required for PDF-to-Markdown conversion. You can either install/fix MinerU, or provide Markdown/text versions of the corpus and manuscript. Markdown input works without MinerU.
 
 If the user provides Markdown/text files, continue without MinerU.
+
+## DOCX / EndNote / WPS tracked-changes workflow
+
+Use this workflow whenever the manuscript is a Word file or the user mentions EndNote, Cite While You Write, CWYW, Word fields, automatic numbering, captions, cross-references, or preserving the original `.docx`.
+
+Hard constraints:
+- Work only on a duplicate named like `[original_stem]_journal_adapt_tracked.docx` unless the user asks for a different copy name.
+- Keep the original manuscript untouched.
+- Use WPS Writer's revision/tracked-changes mode when available. If WPS is unavailable, ask the user whether Microsoft Word tracked changes is acceptable; otherwise stop before editing the DOCX.
+- Do not use DOCX-to-Markdown as the authoritative editing path for the manuscript.
+- Do not rebuild the manuscript with `python-docx`, Pandoc, Mammoth, LibreOffice conversion, or raw OOXML rewriting when citation-field preservation is required.
+- Do not edit EndNote/CWYW citation fields, bibliography fields, Word field codes, automatic numbering fields, cross-reference fields, captions, equation objects, comments, or footnotes unless the user explicitly asks.
+- Rewrite only ordinary prose around protected fields. Leave visible in-text citations and bibliography entries unchanged unless the user explicitly asks to edit citation text.
+
+Operational pattern:
+1. Create the duplicate first and report its path.
+2. Open the duplicate in WPS Writer, enable revision/tracked-changes mode, and keep it enabled for all edits.
+3. Make prose edits in place section by section. Prefer replacing only the sentence or paragraph text that needs revision; avoid selecting text that spans citation fields or generated references.
+4. Preserve citation and cross-reference fields by treating them as anchors. If a sentence contains an EndNote/CWYW citation field, revise the surrounding words without deleting and recreating the field.
+5. Save the duplicate after each completed section.
+6. Provide a separate Markdown or text revision log if useful, but treat the tracked DOCX duplicate as the deliverable.
+7. Tell the user that they can inspect the duplicate and manually accept or reject each tracked change in WPS/Word.
 
 ---
 
@@ -377,9 +404,15 @@ Phase 2 loads only: `dynamic_writing_skill.md` + the manuscript. Do not re-read 
 
 Ask the user:
 
-> Where is your manuscript file? (PDF or Markdown)
+> Where is your manuscript file? (Word DOCX/DOC, Markdown, LaTeX, text, or PDF?)
 
-If PDF: convert with MinerU first, or ask the user for a Markdown/text conversion if MinerU is unavailable.
+If the manuscript is Word `.doc`/`.docx`, ask:
+
+> Does this file contain EndNote/Cite While You Write fields, Word field codes, automatic references, captions, or automatic numbering that must be preserved?
+
+If yes, or if the user is unsure, use the DOCX / EndNote / WPS tracked-changes workflow. Do not convert the manuscript to Markdown.
+
+If PDF: convert with MinerU first only when the user accepts Markdown/text revision output, or ask the user for a Markdown/text conversion if MinerU is unavailable.
 
 ```bash
 python3 -m mineru.cli.pdf_to_md "[manuscript.pdf]" --output-dir "[manuscript_folder]/converted/"
@@ -418,7 +451,13 @@ Rules for revision:
 - Never add new content — only rewrite existing content
 - Preserve all Priority 1 elements verbatim
 
-Output the full revised section as Markdown.
+For Markdown/text/LaTeX manuscripts, output the full revised section as Markdown or the source format requested by the user.
+
+For Word `.doc`/`.docx` manuscripts using WPS tracked changes:
+- Apply the revised wording directly in the duplicate DOCX with revision/tracked-changes mode enabled.
+- Keep protected Word fields intact. Do not delete and reinsert citation fields, bibliography fields, cross-references, automatic numbering, equation objects, captions, comments, or footnotes.
+- If a proposed sentence edit would require moving or splitting an EndNote/CWYW field, stop and explain the exact sentence-level risk instead of making that edit automatically.
+- Do not output the revised section as the deliverable. The deliverable is the tracked-change DOCX copy. You may output a short section note or log summarizing what was changed.
 
 ### Round 3 — Revision Log
 
@@ -446,7 +485,31 @@ At the end of the section log, output a section summary:
 
 ## Step 9 — Save outputs
 
-After all sections are complete, save to the output directory: `[manuscript_folder]/[manuscript_name]_revised/`
+After all sections are complete, save outputs according to the manuscript format.
+
+For Word `.doc`/`.docx` manuscripts using WPS tracked changes, save:
+
+```
+[manuscript_folder]/[manuscript_name]_journal_adapt_tracked.docx
+```
+
+Also save a companion output directory if logs are created:
+
+```
+[manuscript_name]_revised/
+├── dynamic_writing_skill.md    ← reviewed temporary skill for this manuscript
+├── style_profile.md            ← corpus-derived writing profile
+├── revision_log.md             ← section-by-section tracked-change summary
+└── revision_summary.md         ← aggregated rule candidates across all sections
+```
+
+Do not overwrite the original Word file. Tell the user:
+
+> Revision complete. Tracked-change copy saved to: [tracked_docx_path]
+> Original file was not modified.
+> Please open the copy in WPS/Word and manually accept or reject the tracked changes.
+
+For Markdown/text/LaTeX manuscripts, save to the output directory: `[manuscript_folder]/[manuscript_name]_revised/`
 
 File structure:
 ```
@@ -470,7 +533,7 @@ Tell the user:
 
 > Revision complete. Output saved to: [output_path]
 > [N] sections revised. [N] rule candidates identified.
-> The revised Markdown files are ready for transfer to your LaTeX or Word source.
+> The revised text files are ready for transfer to your source.
 
 ---
 

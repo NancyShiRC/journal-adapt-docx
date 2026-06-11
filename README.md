@@ -5,7 +5,9 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 ![Codex](https://img.shields.io/badge/Codex-compatible-green)
-![Version](https://img.shields.io/badge/version-1.1-brightgreen)
+![Version](https://img.shields.io/badge/version-1.2--wps--tracked-brightgreen)
+
+This fork adds a Word-first safety path for manuscripts that contain EndNote, Cite While You Write, Word field codes, automatic numbering, cross-references, captions, or generated bibliographies. For those files, the skill should revise a duplicate DOCX in WPS Writer tracked-changes mode instead of converting the manuscript to Markdown.
 
 There are already many useful **static academic writing skills**: discipline templates, anti-AI phrasing rules, citation/equation safety rules, and general academic style guides. They are valuable, but they usually apply the same rules to every manuscript.
 
@@ -113,6 +115,13 @@ cp -R skill/* ~/.claude/skills/journal-adapt/
 
 For Codex, copy or symlink the `skill/` folder into your Codex skills directory if your local setup supports custom skills. You can also keep the repository open and ask Codex to use `skill/SKILL.md` directly.
 
+Local Codex example:
+
+```bash
+mkdir -p ~/.codex/skills/journal-adapt-writing-skill
+cp -R skill/* ~/.codex/skills/journal-adapt-writing-skill/
+```
+
 More detail: [Installation and PDF Conversion](docs/INSTALLATION.md).
 
 ### 2. Prepare inputs
@@ -140,6 +149,18 @@ my_project/
 
 PDF input requires a PDF-to-Markdown converter. MinerU is supported, but Markdown input is the recommended path if MinerU is hard to install.
 
+Word manuscript workflow for EndNote/CWYW safety:
+
+```text
+my_project/
+├── corpus/
+│   ├── target_journal_001.md
+│   └── target_journal_002.md
+└── manuscript_with_endnote_fields.docx
+```
+
+For Word manuscripts, the skill should create a duplicate named like `manuscript_with_endnote_fields_journal_adapt_tracked.docx`, enable WPS Writer tracked changes, and revise the duplicate in place. The original DOCX should remain untouched.
+
 ### 3. Invoke
 
 ```text
@@ -166,7 +187,7 @@ The skill will ask for:
 
 ## Output
 
-Saved next to the manuscript:
+For Markdown/text/LaTeX manuscripts, outputs are saved next to the manuscript:
 
 ```text
 [manuscript_name]_revised/
@@ -179,7 +200,13 @@ Saved next to the manuscript:
 └── revision_summary.md
 ```
 
-The revised files are Markdown. Move them into LaTeX, Word, or another writing environment after review.
+For Word manuscripts that contain EndNote/CWYW fields or Word automation, the tracked-change DOCX copy is the main deliverable:
+
+```text
+[manuscript_name]_journal_adapt_tracked.docx
+```
+
+The original DOCX is not modified. Review the duplicate in WPS/Word and manually accept or reject tracked changes.
 
 ---
 
@@ -211,6 +238,7 @@ Raw PDFs, converted full text, and the private manuscript are not included.
 
 - English-language academic writing only.
 - PDF conversion quality depends on the converter. MinerU can fail on some local setups.
+- DOCX manuscripts with EndNote/CWYW or Word fields should be revised through WPS/Word tracked changes on a duplicate, not through DOCX-to-Markdown conversion.
 - The project extracts writing structure and rhetorical patterns only. It must not quote or paraphrase copyrighted corpus papers.
 - The generated dynamic skill needs human review before revision begins.
 - The tool does not add facts, citations, results, or claims that are not already in the manuscript.

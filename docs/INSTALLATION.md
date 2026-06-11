@@ -42,6 +42,13 @@ Recommended options:
 - copy or symlink `skill/` into your local Codex skills directory if your installation supports it;
 - paste the path to `skill/SKILL.md` when asking Codex to run the workflow.
 
+Local Codex example:
+
+```bash
+mkdir -p ~/.codex/skills/journal-adapt-writing-skill
+cp -R skill/* ~/.codex/skills/journal-adapt-writing-skill/
+```
+
 ---
 
 ## Recommended Input Path: Markdown
@@ -124,3 +131,21 @@ Common symptoms:
 | Skill refuses to start without MinerU | old skill version | Update `skill/SKILL.md`; current versions only require MinerU for PDF inputs. |
 
 When in doubt, use Markdown input. The dynamic writing skill logic starts after conversion.
+
+---
+
+## Word DOCX Input With EndNote / CWYW Fields
+
+Do not convert a DOCX manuscript to Markdown when it contains EndNote, Cite While You Write, Zotero, Mendeley, Word field codes, generated bibliography, automatic numbering, captions, cross-references, or other Word automation that must be preserved.
+
+For these manuscripts, use the tracked-changes path:
+
+1. Keep the original DOCX untouched.
+2. Create a duplicate named like `[original_stem]_journal_adapt_tracked.docx`.
+3. Open the duplicate in WPS Writer.
+4. Enable revision/tracked-changes mode before editing.
+5. Revise ordinary prose in place, section by section.
+6. Avoid deleting or recreating citation fields, bibliography fields, cross-references, captions, equation objects, comments, and footnotes.
+7. Save the duplicate and review the tracked changes manually in WPS or Word.
+
+This preserves field codes and lets the author decide which edits to accept.

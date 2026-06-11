@@ -12,6 +12,8 @@ journal-adapt builds a **dynamic academic writing skill** from:
 
 The generated rules are reviewable before any manuscript revision starts.
 
+This version includes a Word-first safety path for manuscripts that contain EndNote, Cite While You Write, Word field codes, automatic numbering, captions, cross-references, or generated bibliographies. For those manuscripts, the skill should work on a duplicate DOCX in WPS Writer tracked-changes mode instead of converting the manuscript to Markdown.
+
 ---
 
 ## Install
@@ -26,6 +28,13 @@ cp -R skill/* ~/.claude/skills/journal-adapt/
 For Codex:
 
 - If your Codex setup supports custom skills, install this folder as `journal-adapt`.
+- Example local install:
+
+```bash
+mkdir -p ~/.codex/skills/journal-adapt-writing-skill
+cp -R skill/* ~/.codex/skills/journal-adapt-writing-skill/
+```
+
 - If not, keep this repository open and ask Codex to follow `skill/SKILL.md` directly.
 
 See `docs/INSTALLATION.md` for PDF conversion and MinerU troubleshooting. See `docs/STATIC_SKILL_RECOMMENDATIONS.md` for optional static base skill recommendations.
@@ -44,7 +53,7 @@ The skill will ask for:
 6. manuscript file,
 7. sections to revise.
 
-Markdown inputs work without MinerU. PDF inputs require a PDF-to-Markdown converter.
+Markdown inputs work without MinerU. PDF inputs require a PDF-to-Markdown converter. Word manuscripts with EndNote/CWYW or other Word fields should be revised through WPS/Word tracked changes on a duplicate DOCX, not through DOCX-to-Markdown conversion.
 
 ---
 
@@ -64,7 +73,7 @@ You may replace these with any static writing skill or skip the base layer entir
 
 ## Output
 
-The skill writes Markdown outputs next to the manuscript:
+For Markdown/text/LaTeX manuscripts, the skill writes text outputs next to the manuscript:
 
 ```text
 [manuscript_name]_revised/
@@ -76,3 +85,11 @@ The skill writes Markdown outputs next to the manuscript:
 ```
 
 No facts, equations, citations, variables, or numerical claims should be changed unless the user explicitly approves that change.
+
+For Word manuscripts that contain EndNote/CWYW fields or Word automation, the main output should be:
+
+```text
+[manuscript_name]_journal_adapt_tracked.docx
+```
+
+The original DOCX should not be modified. Review the duplicate in WPS/Word and manually accept or reject tracked changes.
