@@ -1,34 +1,97 @@
-# journal-adapt-writing-skill
-
-> **A static + dynamic academic writing skill framework. Start with reusable writing rules, then generate a corpus-grounded dynamic skill for one manuscript and one writing destination.**
+# journal-adapt-docx
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 ![Codex](https://img.shields.io/badge/Codex-compatible-green)
 ![Version](https://img.shields.io/badge/version-1.2--wps--tracked-brightgreen)
 
-## Attribution and Personal-Use Notice
+## Personal Note
 
-This repository is a personal-use fork/adaptation of the original project: [WantongC/journal-adapt-writing-skill](https://github.com/WantongC/journal-adapt-writing-skill).
+This is my personal copy of [WantongC/journal-adapt-writing-skill](https://github.com/WantongC/journal-adapt-writing-skill).
 
-Full credit for the original journal-adaptation skill framework belongs to the original author(s). This copy is uploaded under my own GitHub account only so I can keep a personally customized version synchronized across my own devices. It is not intended to obscure, replace, or claim authorship of the original work.
+The original idea and main framework come from that repository. I keep this copy under my own GitHub account only so I can adjust the skill for my own manuscript-writing needs and sync the same version across my devices.
 
-This fork adds a Word-first safety path for manuscripts that contain EndNote, Cite While You Write, Word field codes, automatic numbering, cross-references, captions, or generated bibliographies. For those files, the skill should revise a duplicate DOCX in WPS Writer tracked-changes mode instead of converting the manuscript to Markdown.
+My main personal change is: when a manuscript is a Word/DOCX file with EndNote, Cite While You Write, Word field codes, automatic numbering, cross-references, captions, or a generated bibliography, the skill should not convert the DOCX to Markdown for revision. It should work on a duplicate DOCX in WPS Writer tracked-changes mode, so I can review and accept/reject edits manually.
 
-There are already many useful **static academic writing skills**: discipline templates, anti-AI phrasing rules, citation/equation safety rules, and general academic style guides. They are valuable, but they usually apply the same rules to every manuscript.
-
-The missing piece is **journal adaptation**. Even for the same manuscript, writing for Journal A and writing for Journal B may require different introduction logic, contribution framing, method exposition, result emphasis, and discussion scope. A strong revision workflow should learn from the actual papers that define the target writing destination.
-
-**journal-adapt adds that dynamic layer on top of optional static skills.**
-
-- **Static skills** are reusable base rules: discipline conventions, general academic writing constraints, anti-AI phrasing cleanup, citation/equation safety, or your own lab/advisor guide.
-- **Dynamic skills** are generated for one manuscript and one writing destination from a user-provided corpus: target-journal papers, optional field-top or topic-similar papers, and optional user/lab exemplars.
-
-The result is a visible, editable `dynamic_writing_skill.md`. It does not auto-write a paper; it gives the agent an auditable revision framework for section-by-section academic rewriting.
+This repository is not meant to replace the original project or claim credit for it.
 
 ---
 
-## Static + Dynamic
+## What I Use This For
+
+I want one skill that can keep improving with my own needs, especially for medical manuscript writing.
+
+Examples of things I may keep adding later:
+
+- CONSORT / STROBE / PRISMA awareness
+- medical journal writing preferences
+- EndNote and Cite While You Write safety
+- WPS tracked-changes workflow
+- my own preferred revision rules
+
+The goal is simple: adjust the skill once, upload it to GitHub, and reuse the same version on different computers.
+
+---
+
+## My Sync Workflow
+
+### 1. Adjust the skill on one computer
+
+When I notice a new need, I can edit this skill once.
+
+For example, if I want it to pay more attention to CONSORT, STROBE, PRISMA, EndNote, or WPS tracked changes, I can ask Codex to update the skill files in this local repository:
+
+```bash
+cd /Users/shirc/Documents/投稿/journal-adapt-writing-skill
+```
+
+### 2. Upload the updated skill to GitHub
+
+After the skill is changed, commit and push:
+
+```bash
+git add .
+git commit -m "Update journal-adapt skill"
+git push
+```
+
+Then the GitHub copy is updated:
+
+```text
+https://github.com/NancyShiRC/journal-adapt-docx
+```
+
+### 3. Install on another computer for the first time
+
+On a new computer:
+
+```bash
+git clone git@github.com:NancyShiRC/journal-adapt-docx.git
+mkdir -p ~/.codex/skills/journal-adapt-writing-skill
+cp -R journal-adapt-docx/skill/* ~/.codex/skills/journal-adapt-writing-skill/
+```
+
+Then restart Codex.
+
+### 4. Update another computer later
+
+If the repository already exists on that computer:
+
+```bash
+cd journal-adapt-docx
+git pull
+cp -R skill/* ~/.codex/skills/journal-adapt-writing-skill/
+```
+
+Then restart Codex.
+
+This way, I do not need to teach or modify the skill again on every computer. I only keep GitHub as the shared copy.
+
+---
+
+## Original Skill Summary
+
+### Static + Dynamic
 
 ```mermaid
 flowchart TD
@@ -45,7 +108,7 @@ flowchart TD
     style F fill:#f5f0e8,stroke:#999
 ```
 
-## Optional Static Skills
+### Optional Static Skills
 
 The static layer is optional. You can choose an existing open-source skill, bring your own, or skip this layer.
 
@@ -68,7 +131,7 @@ You can also use a custom static skill:
 | Journal or field checklist | You want a lightweight rule sheet instead of a full skill. |
 | No static skill | You want the dynamic corpus to drive the workflow on its own. |
 
-## Dynamic Corpus
+### Dynamic Corpus
 
 The dynamic corpus is the main feature. It is broader than "papers from the target journal."
 
@@ -80,7 +143,7 @@ The dynamic corpus is the main feature. It is broader than "papers from the targ
 
 The target journal usually has the highest priority. Optional secondary papers and user/lab exemplars enrich the dynamic skill, but they do not override reviewed target-journal patterns unless the user explicitly chooses that behavior.
 
-## Priority System
+### Priority System
 
 | Priority | Source | Rule |
 |----------|--------|------|
@@ -94,7 +157,7 @@ P1 always wins. P2 usually beats P3 and P4. Any conflict that changes revision b
 
 ---
 
-## Corpus Preparation
+### Corpus Preparation
 
 Recommended starting point:
 
