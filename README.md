@@ -7,6 +7,12 @@
 ![Codex](https://img.shields.io/badge/Codex-compatible-green)
 ![Version](https://img.shields.io/badge/version-1.2--wps--tracked-brightgreen)
 
+## Attribution and Personal-Use Notice
+
+This repository is a personal-use fork/adaptation of the original project: [WantongC/journal-adapt-writing-skill](https://github.com/WantongC/journal-adapt-writing-skill).
+
+Full credit for the original journal-adaptation skill framework belongs to the original author(s). This copy is uploaded under my own GitHub account only so I can keep a personally customized version synchronized across my own devices. It is not intended to obscure, replace, or claim authorship of the original work.
+
 This fork adds a Word-first safety path for manuscripts that contain EndNote, Cite While You Write, Word field codes, automatic numbering, cross-references, captions, or generated bibliographies. For those files, the skill should revise a duplicate DOCX in WPS Writer tracked-changes mode instead of converting the manuscript to Markdown.
 
 There are already many useful **static academic writing skills**: discipline templates, anti-AI phrasing rules, citation/equation safety rules, and general academic style guides. They are valuable, but they usually apply the same rules to every manuscript.
